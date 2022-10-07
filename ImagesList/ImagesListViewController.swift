@@ -1,15 +1,7 @@
-//
-//  ViewController.swift
-//  ImageFeed
-//
-//  Created by  admin on 28.09.2022.
-//
-
 import UIKit
 
 class ImagesListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
-    @IBOutlet weak var cellImageView: UIImageView!
     private var photos: [String] = []
 
     private lazy var dateFormatter: DateFormatter = {
@@ -21,22 +13,18 @@ class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
         photos = Array(0..<20).map{ "\($0)" }
     }
 
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        
+        print(indexPath.row)
         guard let image = UIImage(named: photos[indexPath.row]) else {
             return
         }
-        // cell.setValue(image, forKey: "imageView")
-        if #available(iOS 14.0, *) {
-            var content = cell.defaultContentConfiguration()
-        } else {
-            cellImageView.image = image
-        }
-        
+        cell.cellImage.image = image
+        let liked: String = indexPath.row % 2 == 0 ? "NoLike" : "Like"
+        cell.cellLike.setImage(UIImage(named: liked), for: .normal)
+        cell.cellDate.text = dateFormatter.string(from: Date())
     }
 
 }

@@ -8,6 +8,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="YS Display-Medium.ttf">
+            <string>YSDisplay-Medium</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--ImagesList-->
         <scene sceneID="tne-QT-ifu">
@@ -21,13 +26,54 @@
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                                 <color key="backgroundColor" name="YPBlack"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" id="Tca-by-b0R" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="390" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="210" id="Tca-by-b0R" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="390" height="210"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Tca-by-b0R" id="gS3-K4-k9f">
-                                            <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
+                                        <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Tca-by-b0R" id="gS3-K4-k9f">
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="210"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="Fb8-81-31b">
+                                                    <rect key="frame" x="20" y="11" width="350" height="188"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.contentRadius">
+                                                            <integer key="value" value="16"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="gradient" translatesAutoresizingMaskIntoConstraints="NO" id="qgZ-Wf-WS2">
+                                                    <rect key="frame" x="47" y="180" width="343" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="07 октября 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EWx-YO-19b" userLabel="dateLabel">
+                                                    <rect key="frame" x="27.999999999999993" y="187" width="127.33333333333331" height="20"/>
+                                                    <fontDescription key="fontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kmQ-Zb-PJ5">
+                                                    <rect key="frame" x="349" y="11" width="21" height="18"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain">
+                                                        <backgroundConfiguration key="background" image="NoLike"/>
+                                                    </buttonConfiguration>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" name="YPBlack"/>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Fb8-81-31b" secondAttribute="bottom" id="7Ea-sN-TBe"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="EWx-YO-19b" secondAttribute="trailing" id="QNm-Kn-NKo"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Fb8-81-31b" secondAttribute="trailing" id="QRh-Tq-Miu"/>
+                                                <constraint firstItem="Fb8-81-31b" firstAttribute="leading" secondItem="gS3-K4-k9f" secondAttribute="leadingMargin" id="Z5i-XJ-5id"/>
+                                                <constraint firstItem="Fb8-81-31b" firstAttribute="top" secondItem="gS3-K4-k9f" secondAttribute="topMargin" id="bzU-SF-MbW"/>
+                                                <constraint firstItem="kmQ-Zb-PJ5" firstAttribute="top" secondItem="Fb8-81-31b" secondAttribute="top" id="edi-aa-Uwr"/>
+                                                <constraint firstItem="EWx-YO-19b" firstAttribute="leading" secondItem="Fb8-81-31b" secondAttribute="leading" constant="8" id="kSn-o2-nSK"/>
+                                                <constraint firstItem="kmQ-Zb-PJ5" firstAttribute="trailing" secondItem="Fb8-81-31b" secondAttribute="trailing" id="l83-Jx-wHt"/>
+                                                <constraint firstItem="EWx-YO-19b" firstAttribute="bottom" secondItem="Fb8-81-31b" secondAttribute="bottom" constant="8" id="lBo-Or-VMn"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="YPBlack"/>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -46,6 +92,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="cellImageView" destination="Fb8-81-31b" id="ang-y6-woo"/>
                         <outlet property="tableView" destination="O7y-c0-3qi" id="luK-XY-tIR"/>
                     </connections>
                 </viewController>
@@ -55,6 +102,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="0" width="200" height="132"/>
+        <image name="NoLike" width="29.333333969116211" height="26"/>
+        <image name="gradient" width="343" height="30"/>
         <namedColor name="YPBlack">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

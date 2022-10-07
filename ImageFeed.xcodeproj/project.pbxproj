@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8402EBBD28F0080500CE0BC0 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8402EBBB28F0080500CE0BC0 /* YS Display-Bold.ttf */; };
+		8402EBBE28F0080500CE0BC0 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8402EBBC28F0080500CE0BC0 /* YS Display-Medium.ttf */; };
 		8471094828EF442D00990F6D /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8471094728EF442D00990F6D /* ImagesListCell.swift */; };
 		84C14EC828E4CBF60065488E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C14EC728E4CBF60065488E /* AppDelegate.swift */; };
 		84C14ECA28E4CBF60065488E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C14EC928E4CBF60065488E /* SceneDelegate.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8402EBBB28F0080500CE0BC0 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
+		8402EBBC28F0080500CE0BC0 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
 		8471094728EF442D00990F6D /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 		84C14EC428E4CBF60065488E /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84C14EC728E4CBF60065488E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -39,6 +43,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8402EBB628F0076100CE0BC0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8402EBBB28F0080500CE0BC0 /* YS Display-Bold.ttf */,
+				8402EBBC28F0080500CE0BC0 /* YS Display-Medium.ttf */,
+				84C14ED028E4CC040065488E /* Assets.xcassets */,
+				84C14ED528E4CC040065488E /* Info.plist */,
+				84C14ED228E4CC040065488E /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		8471094928EF449300990F6D /* ImagesList */ = {
 			isa = PBXGroup;
 			children = (
@@ -68,12 +84,10 @@
 		84C14EC628E4CBF60065488E /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
+				8402EBB628F0076100CE0BC0 /* Resources */,
 				84C14EC728E4CBF60065488E /* AppDelegate.swift */,
 				84C14EC928E4CBF60065488E /* SceneDelegate.swift */,
 				84C14ECD28E4CBF60065488E /* Main.storyboard */,
-				84C14ED028E4CC040065488E /* Assets.xcassets */,
-				84C14ED228E4CC040065488E /* LaunchScreen.storyboard */,
-				84C14ED528E4CC040065488E /* Info.plist */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -139,6 +153,8 @@
 				84C14ED428E4CC040065488E /* LaunchScreen.storyboard in Resources */,
 				84C14ED128E4CC040065488E /* Assets.xcassets in Resources */,
 				84C14ECF28E4CBF60065488E /* Main.storyboard in Resources */,
+				8402EBBD28F0080500CE0BC0 /* YS Display-Bold.ttf in Resources */,
+				8402EBBE28F0080500CE0BC0 /* YS Display-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,7 +317,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F8PJ83T7FB;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ImageFeed/Info.plist;
+				INFOPLIST_FILE = ImageFeed/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -332,7 +348,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F8PJ83T7FB;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ImageFeed/Info.plist;
+				INFOPLIST_FILE = ImageFeed/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

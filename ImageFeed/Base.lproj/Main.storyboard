@@ -111,6 +111,7 @@
                     <navigationItem key="navigationItem" id="HbQ-SJ-f99"/>
                     <connections>
                         <outlet property="tableView" destination="O7y-c0-3qi" id="luK-XY-tIR"/>
+                        <segue destination="lNp-X7-wuM" kind="show" identifier="ShowSingleImage" id="Vey-qV-72H"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -232,8 +233,39 @@
             </objects>
             <point key="canvasLocation" x="227.69230769230768" y="434.36018957345971"/>
         </scene>
+        <!--Single Image View Controller-->
+        <scene sceneID="mkj-lS-P1h">
+            <objects>
+                <viewController id="lNp-X7-wuM" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PbT-l5-yTC">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="Stz-Kc-8rR">
+                                <rect key="frame" x="0.0" y="91" width="390" height="670"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="RqU-A9-Nku"/>
+                        <color key="backgroundColor" name="YPBlack"/>
+                        <constraints>
+                            <constraint firstItem="Stz-Kc-8rR" firstAttribute="leading" secondItem="RqU-A9-Nku" secondAttribute="leading" id="0uT-0k-L6T"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Stz-Kc-8rR" secondAttribute="bottom" id="TVI-FF-Wz9"/>
+                            <constraint firstItem="Stz-Kc-8rR" firstAttribute="top" secondItem="PbT-l5-yTC" secondAttribute="topMargin" id="ZF2-D1-3VB"/>
+                            <constraint firstItem="RqU-A9-Nku" firstAttribute="trailing" secondItem="Stz-Kc-8rR" secondAttribute="trailing" id="za4-Wt-24z"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="rZQ-cI-c2C"/>
+                    <connections>
+                        <outlet property="imageView" destination="Stz-Kc-8rR" id="8tq-jF-vhE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Czq-CS-DN1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="263" y="1233"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="0" width="200" height="132"/>
         <image name="18" width="200" height="300"/>
         <image name="avatar" width="70" height="70"/>
         <image name="gradient" width="343" height="30"/>

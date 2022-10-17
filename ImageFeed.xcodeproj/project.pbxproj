@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8402EBBD28F0080500CE0BC0 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8402EBBB28F0080500CE0BC0 /* YS Display-Bold.ttf */; };
 		8402EBBE28F0080500CE0BC0 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8402EBBC28F0080500CE0BC0 /* YS Display-Medium.ttf */; };
+		842AC21228FDB22A004E9063 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842AC21128FDB22A004E9063 /* SingleImageViewController.swift */; };
 		8436F0AB28F4450F00281BF8 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8436F0AA28F4450F00281BF8 /* Profile.storyboard */; };
 		8436F0AE28F4454C00281BF8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8436F0AD28F4454C00281BF8 /* ProfileViewController.swift */; };
 		8471094828EF442D00990F6D /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8471094728EF442D00990F6D /* ImagesListCell.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		8402EBBB28F0080500CE0BC0 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
 		8402EBBC28F0080500CE0BC0 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
+		842AC21128FDB22A004E9063 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		8436F0AA28F4450F00281BF8 /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		8436F0AD28F4454C00281BF8 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		8471094728EF442D00990F6D /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				84C14EC728E4CBF60065488E /* AppDelegate.swift */,
 				84C14EC928E4CBF60065488E /* SceneDelegate.swift */,
 				84C14ECD28E4CBF60065488E /* Main.storyboard */,
+				842AC21128FDB22A004E9063 /* SingleImageViewController.swift */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -184,6 +187,7 @@
 				8471094828EF442D00990F6D /* ImagesListCell.swift in Sources */,
 				8436F0AE28F4454C00281BF8 /* ProfileViewController.swift in Sources */,
 				84C14EC828E4CBF60065488E /* AppDelegate.swift in Sources */,
+				842AC21228FDB22A004E9063 /* SingleImageViewController.swift in Sources */,
 				84C14ECA28E4CBF60065488E /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

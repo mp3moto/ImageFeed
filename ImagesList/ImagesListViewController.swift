@@ -18,7 +18,7 @@ class ImagesListViewController: UIViewController {
     }
 
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        print(indexPath.row)
+        // print(indexPath.row)
         guard let image = UIImage(named: photos[indexPath.row]) else {
             return
         }

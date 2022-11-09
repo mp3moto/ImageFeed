@@ -11,14 +11,13 @@ class ImagesListViewController: UIViewController {
         formatter.timeStyle = .none
         return formatter
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         photos = Array(0..<20).map{ "\($0)" }
     }
 
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        // print(indexPath.row)
         guard let image = UIImage(named: photos[indexPath.row]) else {
             return
         }
@@ -27,14 +26,13 @@ class ImagesListViewController: UIViewController {
         cell.cellLike.setImage(UIImage(named: liked), for: .normal)
         cell.cellDate.text = dateFormatter.string(from: Date())
     }
-
 }
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photos.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
 

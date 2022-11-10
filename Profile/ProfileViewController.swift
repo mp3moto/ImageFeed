@@ -1,12 +1,13 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    @IBOutlet private weak var profileImage: UIImageView!
+
     @IBOutlet private weak var profileUserName: UILabel!
     @IBOutlet private weak var profileAccountName: UILabel!
-    @IBOutlet private weak var profileUserStatus: UILabel!
+    @IBOutlet weak var profileUserStatus: UILabel!
+    @IBOutlet private weak var profileImage: UIImageView!
 
-    @IBAction private func didTapLogoutButton(_ sender: Any) {
+    @IBAction func didTapLogoutButton(_ sender: Any) {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Нет", style: .cancel, handler: { _ in
 
@@ -21,6 +22,7 @@ final class ProfileViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         /* TESTING OUTLETS */
         profileImage.image = UIImage(named: "7")
         profileUserName.text = "Ренат Гареев"

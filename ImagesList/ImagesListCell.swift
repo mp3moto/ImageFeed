@@ -6,4 +6,3 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var cellLike: UIButton!
     static let reuseIdentifier = "ImagesListCell"
 }
-

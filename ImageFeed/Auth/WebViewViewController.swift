@@ -8,6 +8,7 @@ final class WebViewViewController: UIViewController{
     @IBAction func didTapBackButton(_ sender: Any) {
         authDelegate?.webViewViewControllerDidCancel(self)
     }
+    var delay: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +59,7 @@ final class WebViewViewController: UIViewController{
 extension WebViewViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let code = code(from: navigationAction) {
-            authDelegate?.webViewViewController(self, didAuthenticateWithCode: code)
+            authDelegate?.webViewViewController(self, didAuthenticateWithCode: code, delay: delay)
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)

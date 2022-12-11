@@ -8,10 +8,40 @@ struct OAuthTokenResponseBody: Decodable {
     let created_at: Double
 }
 
-struct UnsplashProfileData: Decodable {
-    let id: String
-    let username: String
-    let first_name: String
-    let last_name: String
-    let bio: String
+struct ProfileResult: Decodable {
+    let id: String?
+    let username: String?
+    let first_name: String?
+    let last_name: String?
+    let bio: String?
+    
+    func name() -> String? {
+        var output: String?
+        if let name = self.first_name {
+            output = "\(name)"
+            if let lastname = self.last_name {
+                output = "\(output!) \(lastname)"
+            }
+        } else {
+            if let lastname = self.last_name {
+                output = "\(lastname)"
+            }
+        }
+        return output
+    }
+}
+
+struct ProfileImage: Decodable {
+    let small: String
+}
+
+struct UsersPublicProfileResult: Decodable {
+    let profile_image: ProfileImage
+}
+
+struct Profile: Codable {
+    let username: String?
+    let name: String?
+    let bio: String?
+    let image: String
 }

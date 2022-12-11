@@ -5,32 +5,45 @@ final class SplashViewController: UIViewController {
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     private let networkClient: NetworkRouting = NetworkClient()
 
-    func loadUserData(token: String, completion: @escaping (Result<UnsplashProfileData, Error>) -> Void) {
-        self.networkClient.fetch(url: ProfileDataURL!, method: "GET", userData: nil, headers: ["Authorization": "Bearer \(token)"],queryItemsInURL: true, handler: { result in
-            switch result {
-            case .success(let rawData):
-                do {
-                    let JSONtoStruct = try JSONDecoder().decode(UnsplashProfileData.self, from: rawData)
-                    completion(.success(JSONtoStruct))
-                } catch {
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        })
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        if let token = storage.token {
+        /*DispatchQueue.main.async {
+            UIBlockingProgressHUD.show()
+        }*/
+        let profileService: ProfileService = ProfileService()
+        profileService.getProfile(completion: { result in
+            switch result {
+            case .success(_):
+                DispatchQueue.main.async {
+                    UIBlockingProgressHUD.dismiss()
+                    self.performSegue(withIdentifier: self.showTabBarViewSegueIdentifier, sender: nil)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    UIBlockingProgressHUD.dismiss()
+                    self.performSegue(withIdentifier: showAuthViewSegueIdentifier, sender: nil)
+                }
+            }
+        })
+        
+        
+        //
+        //progress.show()
+        /*if let token = storage.token {
+            DispatchQueue.main.async {
+                UIBlockingProgressHUD.show()
+            }
             loadUserData(token: token, completion: { result in
                 switch result {
                 case .failure(let error):
                     print(error.localizedDescription)
                 case .success(let unsplashProfileData):
-                    if !unsplashProfileData.id.isEmpty {
+                    if let _ = unsplashProfileData.id {
+                        //print(unsplashProfileData)
                         DispatchQueue.main.async {
+                            //ProgressHUD.dismiss()
+                            UIBlockingProgressHUD.dismiss()
                             self.performSegue(withIdentifier: self.showTabBarViewSegueIdentifier, sender: nil)
                         }
                     } else {
@@ -43,7 +56,7 @@ final class SplashViewController: UIViewController {
             })
         } else {
             performSegue(withIdentifier: showAuthViewSegueIdentifier, sender: nil)
-        }
+        }*/
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

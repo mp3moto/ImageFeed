@@ -8,7 +8,7 @@ struct OAuthTokenResponseBody: Decodable {
     let created_at: Double
 }
 
-struct ProfileResult: Decodable {
+struct Profile: Decodable {
     let id: String?
     let username: String?
     let first_name: String?
@@ -32,16 +32,16 @@ struct ProfileResult: Decodable {
 }
 
 struct ProfileImage: Decodable {
-    let small: String
+    let large: String
 }
 
-struct UsersPublicProfileResult: Decodable {
+struct UserResult: Decodable {
     let profile_image: ProfileImage
 }
 
-struct Profile: Codable {
+/*struct Profile: Codable {
     let username: String?
     let name: String?
     let bio: String?
-    let image: String
-}
+    let image: String?
+}*/

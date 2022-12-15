@@ -2,7 +2,7 @@ import UIKit
 import WebKit
 
 final class WebViewViewController: UIViewController{
-    weak var authDelegate: WebViewViewControllerDelegate?
+    weak var authDelegate: WebViewViewControllerProtocol?
     @IBOutlet private weak var webViewViewController: WKWebView!
     @IBOutlet private weak var progressView: UIProgressView!
     @IBAction func didTapBackButton(_ sender: Any) {

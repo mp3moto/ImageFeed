@@ -1,6 +1,7 @@
 import Foundation
 
 final class DataStorage {
+    /*
     private let userDefaults = UserDefaults.standard
     private enum Keys: String {
         case profile
@@ -21,4 +22,5 @@ final class DataStorage {
             userDefaults.set(data, forKey: Keys.profile.rawValue)
         }
     }
+     */
 }

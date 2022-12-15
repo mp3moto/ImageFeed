@@ -1,7 +1,7 @@
 import UIKit
 import WebKit
 
-final class AuthViewController: UIViewController, WebViewViewControllerDelegate {
+final class AuthViewController: UIViewController, WebViewViewControllerProtocol {
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     private enum Keys: String {

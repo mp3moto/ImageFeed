@@ -1,6 +1,9 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
+    
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
 
     @IBOutlet private weak var profileUserName: UILabel!
     @IBOutlet private weak var profileAccountName: UILabel!
@@ -20,14 +23,72 @@ final class ProfileViewController: UIViewController {
 
         present(alert, animated: true)
     }
+    
+    /*override init(nibName: String?, bundle: Bundle?) {
+        super.init(nibName: nibName, bundle: bundle)
+        addObserver()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        addObserver()
+    }
+    
+    deinit {
+        removeObserver()
+    }*/
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        /* TESTING OUTLETS */
-        profileImage.image = UIImage(named: "7")
-        profileUserName.text = "Ренат Гареев"
-        profileAccountName.text = "@gareevrenat"
-        profileUserStatus.text = "Не ошибается тот, кто ничего не делает"
-        /* -------------- */
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
+        if let profile = profileService.profile {
+            updateProfileDetails(profile: profile)
+        }
+        /*
+        profileService.fetchProfile(completion: { result in
+            switch result {
+            case .success(let profile):
+                print("network query completed")
+                self.updateProfileDetails(profile: profile)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+            
+        })
+        */
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = profileImageService.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        
+        //TODO kingfisher
+    }
+    
+    private func updateProfileDetails(profile: Profile) {
+        /*if let data = profile?.image {
+            profileImage.image = UIImage(data: data)
+        } else {
+            profileImage.image = UIImage(named: "avatar")
+        }*/
+        self.profileUserName.text = profile.name()
+        self.profileAccountName.text = profile.username
+        self.profileUserStatus.text = profile.bio
+        
+        
+         
     }
 }

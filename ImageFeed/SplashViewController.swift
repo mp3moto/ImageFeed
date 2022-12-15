@@ -1,22 +1,33 @@
 import UIKit
 
-final class SplashViewController: UIViewController {
+final class SplashViewController: UIViewController, SplashViewControllerProtocol {
     private let showTabBarViewSegueIdentifier = "ShowTabBarView"
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     private let networkClient: NetworkRouting = NetworkClient()
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        /*DispatchQueue.main.async {
+        profileService.delegate = self
+        DispatchQueue.main.async {
             UIBlockingProgressHUD.show()
-        }*/
-        let profileService: ProfileService = ProfileService()
-        profileService.getProfile(completion: { result in
+        }
+        //let profileService: ProfileService = ProfileService()
+        print("0. profileService.fetchProfile")
+        
+        profileService.fetchProfile(completion: { result in
             switch result {
             case .success(_):
+                print("1. profileService.fetchProfile -> success")
                 DispatchQueue.main.async {
                     UIBlockingProgressHUD.dismiss()
-                    self.performSegue(withIdentifier: self.showTabBarViewSegueIdentifier, sender: nil)
+                    if let username = self.profileService.profile?.username {
+                        self.profileImageService.fetchProfileImageURL(username: username, completion: { result in
+                            
+                        })
+                        self.performSegue(withIdentifier: self.showTabBarViewSegueIdentifier, sender: nil)
+                    }
                 }
             case .failure(let error):
                 print(error.localizedDescription)
@@ -26,6 +37,8 @@ final class SplashViewController: UIViewController {
                 }
             }
         })
+        
+        
         
         
         //
@@ -67,6 +80,13 @@ final class SplashViewController: UIViewController {
             _ = segue.destination as! TabBarController
         default:
             super.prepare(for: segue, sender: sender)
+        }
+    }
+    
+    func showImageFeed() {
+        DispatchQueue.main.async {
+            UIBlockingProgressHUD.dismiss()
+            self.performSegue(withIdentifier: self.showTabBarViewSegueIdentifier, sender: nil)
         }
     }
 }

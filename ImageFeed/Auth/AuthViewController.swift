@@ -8,7 +8,6 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
         case access_token
     }
 
-    @IBOutlet weak var delayValue: UITextField!
     @IBAction func didTapLoginButton(_ sender: Any) {
         //var delay = Int(delayValue.text!)
         performSegue(withIdentifier: showWebViewSegueIdentifier, sender: sender)
@@ -29,7 +28,7 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
 
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String, delay: Int) -> Void {
         let oauth: OAuth2Service = OAuth2Service()
-        oauth.fetchAuthToken(code: code, delay: delay, completion: { [weak self] result in
+        oauth.fetchAuthToken(code: code, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .failure(let error):

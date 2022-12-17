@@ -44,97 +44,28 @@ final class ProfileService {
     
     func fetchProfile(completion: @escaping (Result<Profile,Error>) -> Void) {
         if let token = storage.token {
-            self.networkClient.fetch(
+            var req: RequestFactoryProtocol = RequestFactory()
+            guard let request = req.createRequest(
                 url: ProfileDataURL!,
                 method: "GET",
-                userData: nil,
+                postData: nil,
                 headers: ["Authorization": "Bearer \(token)"],
-                queryItemsInURL: false,
-                handler: { result in
-                    //print("fetchProfileData processing result")
-                    switch result {
-                    case .success(let rawData):
-                        do {
-                            let JSONtoStruct = try JSONDecoder().decode(Profile.self, from: rawData)
-                            self.profile = JSONtoStruct
-                            completion(.success(JSONtoStruct))
-                        } catch {
-                            completion(.failure(ProfileServiceError.invalidTokenInFetchProfileData))
-                        }
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
+                queryItemsInURL: false
+            ) else { return }
+            let session = URLSession.shared
+            let task = session.objectTask(for: request) { (result: Result<Profile, Error>) in
+                switch result {
+                case .success(let profile):
+                    self.profile = profile
+                    completion(.success(profile))
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    completion(.failure(ProfileServiceError.invalidTokenInFetchProfileData))
                 }
-            )
+            }
+            task.resume()
         } else {
             completion(.failure(ProfileServiceError.emptyToken))
         }
     }
-    /*
-    private func fetchProfilePhoto(token: String, profileData: ProfileResult, completion: @escaping (Result<Profile, Error>) -> Void) {
-        if let username = profileData.username {
-            let PublicProfileURL = URL(string: "https://api.unsplash.com/users/\(username)")
-            print("username is \(username)")
-            self.networkClient.fetch(
-                url: PublicProfileURL!,
-                method: "GET",
-                userData: nil,
-                headers: ["Authorization": "Bearer \(token)"],
-                queryItemsInURL: false,
-                handler: { result in
-                    print("used token is \(token)")
-                    switch result {
-                    case .success(let rawData):
-                        do {
-                            let JSONtoStruct = try JSONDecoder().decode(UsersPublicProfileResult.self, from: rawData)
-                            
-                            self.delegate?.showImageFeed()
-                            let profile = Profile(
-                                username: profileData.username,
-                                name: profileData.name(),
-                                bio: profileData.bio,
-                                image: JSONtoStruct.profile_image.large
-                            )
-                            self.profileImageService.avatarURL = JSONtoStruct.profile_image.large
-                            completion(.success(profile))
-                        } catch {
-                            completion(.failure(ProfileServiceError.invalidTokenInFetchProfilePhoto))
-                        }
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                }
-            )
-        }
-    }
-     */
-    /*
-    func getProfile(completion: @escaping (Result<Profile, Error>) -> Void) {
-        if let token = getAuthToken() {
-            fetchProfileData(
-                token: token,
-                completion: { result in
-                    switch result {
-                    case .success(let profileData):
-                        self.fetchProfilePhoto(token: token,
-                                               profileData: profileData,
-                                               completion: { result in
-                            switch result {
-                            case .success(let profile):
-                                self.profile = profile
-                                completion(.success(profile))
-                            case .failure(let error):
-                                completion(.failure(error))
-                            }
-                        })
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                }
-            )
-        } else {
-            completion(.failure(ProfileServiceError.emptyToken))
-        }
-    }
-     */
 }

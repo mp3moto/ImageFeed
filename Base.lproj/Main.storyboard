@@ -182,12 +182,6 @@
                                     <action selector="didTapLoginButton:" destination="vba-8v-hsg" eventType="touchUpInside" id="m3j-ay-ak0"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yvw-8D-jRk">
-                                <rect key="frame" x="147" y="558" width="97" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="pi8-fx-Ff2"/>
                         <color key="backgroundColor" name="YPBlack"/>
@@ -201,7 +195,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="ZQY-K6-gKR"/>
                     <connections>
-                        <outlet property="delayValue" destination="yvw-8D-jRk" id="Ge3-zv-y5c"/>
                         <segue destination="JwJ-5S-45k" kind="presentation" identifier="ShowWebView" modalPresentationStyle="fullScreen" id="T1f-YR-6Cb"/>
                     </connections>
                 </viewController>
@@ -237,7 +230,7 @@
                                     <action selector="didTapBackButton:" destination="JwJ-5S-45k" eventType="touchUpInside" id="wjj-7F-nFQ"/>
                                 </connections>
                             </button>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="fdF-kU-zTH">
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fdF-kU-zTH">
                                 <rect key="frame" x="0.0" y="80" width="390" height="4"/>
                                 <color key="progressTintColor" name="YPBlack"/>
                             </progressView>

@@ -3,6 +3,8 @@ import WebKit
 
 final class WebViewViewController: UIViewController{
     weak var authDelegate: WebViewViewControllerProtocol?
+    private var estimatedProgressObservation: NSKeyValueObservation?
+    
     @IBOutlet private weak var webViewViewController: WKWebView!
     @IBOutlet private weak var progressView: UIProgressView!
     @IBAction func didTapBackButton(_ sender: Any) {
@@ -23,6 +25,13 @@ final class WebViewViewController: UIViewController{
         let url = urlComponents.url!
         let request = URLRequest(url: url)
         webViewViewController.load(request)
+        
+        estimatedProgressObservation = webViewViewController.observe(
+            \.estimatedProgress,
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,7 +41,10 @@ final class WebViewViewController: UIViewController{
             super.prepare(for: segue, sender: sender)
         }
     }
+    
+    
 
+    /*
     override func viewWillAppear(_ animated: Bool) {
         webViewViewController.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
     }
@@ -48,6 +60,7 @@ final class WebViewViewController: UIViewController{
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
+     */
 
     private func updateProgress() {
         let progress: Float = Float(webViewViewController.estimatedProgress)

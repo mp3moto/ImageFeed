@@ -4,11 +4,41 @@ protocol NetworkRouting {
     func fetch(url: URL, method: String?, userData: [String: Any]?, headers: [String: Any]?, queryItemsInURL: Bool, handler: @escaping (Result<Data, Error>) -> Void)
 }
 
-struct NetworkClient: NetworkRouting {
-    private enum NetworkError: Error {
-        case codeError
-    }
+enum NetworkError: Error {
+    case codeError
+}
 
+extension URLSession {
+    func objectTask<T: Decodable>(
+        for request: URLRequest,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) -> URLSessionTask {
+        let task = dataTask(with: request, completionHandler: { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+            }
+            if let response = response as? HTTPURLResponse, response.statusCode < 200 || response.statusCode >= 300 {
+                completion(.failure(NetworkError.codeError))
+            }
+            guard let data = data else {
+                return
+            }
+            do {
+                let JSONtoStruct = try JSONDecoder().decode(T.self, from: data)
+                //print(JSONtoStruct)
+                completion(.success(JSONtoStruct))
+            } catch {
+                completion(.failure(NetworkError.codeError))
+            }
+
+        })
+        return task
+    }
+}
+
+
+
+struct NetworkClient: NetworkRouting {
     func fetch(url: URL, method: String?, userData: [String: Any]?, headers: [String: Any]?, queryItemsInURL: Bool = false, handler: @escaping (Result<Data, Error>) -> Void) {
         var httpMethod: String
         var urlComponents: URLComponents

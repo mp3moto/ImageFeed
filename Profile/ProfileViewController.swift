@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -55,18 +56,6 @@ final class ProfileViewController: UIViewController {
         if let profile = profileService.profile {
             updateProfileDetails(profile: profile)
         }
-        /*
-        profileService.fetchProfile(completion: { result in
-            switch result {
-            case .success(let profile):
-                print("network query completed")
-                self.updateProfileDetails(profile: profile)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-            
-        })
-        */
     }
     
     private func updateAvatar() {
@@ -75,20 +64,12 @@ final class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else { return }
         
-        //TODO kingfisher
+        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "avatar"))
     }
     
     private func updateProfileDetails(profile: Profile) {
-        /*if let data = profile?.image {
-            profileImage.image = UIImage(data: data)
-        } else {
-            profileImage.image = UIImage(named: "avatar")
-        }*/
         self.profileUserName.text = profile.name()
         self.profileAccountName.text = profile.username
         self.profileUserStatus.text = profile.bio
-        
-        
-         
     }
 }

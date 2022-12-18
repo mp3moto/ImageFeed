@@ -1,19 +1,20 @@
 import UIKit
 
-final class SplashViewController: UIViewController, SplashViewControllerProtocol {
+final class SplashViewController: UIViewController, SplashViewControllerProtocol, KeychainEventsProtocol {
     private let showTabBarViewSegueIdentifier = "ShowTabBarView"
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     private let networkClient: NetworkRouting = NetworkClient()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
-
+    static let shared = SplashViewController()
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
+        /*
         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         print(documentsURL) 
-        
-        profileService.delegate = self
+        */
+        //profileService.delegate = self
         DispatchQueue.main.async {
             UIBlockingProgressHUD.show()
         }
@@ -78,5 +79,15 @@ final class SplashViewController: UIViewController, SplashViewControllerProtocol
             UIBlockingProgressHUD.dismiss()
             self.performSegue(withIdentifier: self.showTabBarViewSegueIdentifier, sender: nil)
         }
+    }
+    
+    func keychainError() {
+        let alert = AlertService(
+            title: "Ошибка",
+            message: "Не удается получить доступ к защищенному хранилищу",
+            buttonText: "ОК",
+            controller: self) { _ in
+                self.performSegue(withIdentifier: showAuthViewSegueIdentifier, sender: nil)
+            }
     }
 }

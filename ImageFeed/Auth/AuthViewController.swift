@@ -35,7 +35,7 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
                 print(error.localizedDescription)
             case .success(let oauthTokenResponseBody):
                 if !oauthTokenResponseBody.access_token.isEmpty {
-                    print("fetched token is \(oauthTokenResponseBody.access_token)")
+                    //print("fetched token is \(oauthTokenResponseBody.access_token)")
                     self.storage.token = oauthTokenResponseBody.access_token
                     self.webViewViewtokenReceived(vc)
                 } else {

@@ -30,7 +30,7 @@ final class ProfileService {
     private let networkClient: NetworkRouting = NetworkClient()
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     private let profileImageService = ProfileImageService.shared
-    weak var delegate: SplashViewControllerProtocol?
+    //weak var delegate: SplashViewControllerProtocol?
     
     private var _profile: Profile?
     var profile: Profile? {
@@ -44,7 +44,7 @@ final class ProfileService {
     
     func fetchProfile(completion: @escaping (Result<Profile,Error>) -> Void) {
         if let token = storage.token {
-            var req: RequestFactoryProtocol = RequestFactory()
+            let req: RequestFactoryProtocol = RequestFactory()
             guard let request = req.createRequest(
                 url: ProfileDataURL!,
                 method: "GET",

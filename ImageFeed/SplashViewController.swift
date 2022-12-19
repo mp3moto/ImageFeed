@@ -1,4 +1,5 @@
 import UIKit
+import SwiftKeychainWrapper
 
 final class SplashViewController: UIViewController, SplashViewControllerProtocol, KeychainEventsProtocol {
     private let showTabBarViewSegueIdentifier = "ShowTabBarView"
@@ -6,6 +7,10 @@ final class SplashViewController: UIViewController, SplashViewControllerProtocol
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     static let shared = SplashViewController()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
@@ -50,6 +55,7 @@ final class SplashViewController: UIViewController, SplashViewControllerProtocol
                     if error as! ProfileServiceError == ProfileServiceError.emptyToken {
                         self.performSegue(withIdentifier: showAuthViewSegueIdentifier, sender: nil)
                     } else {
+                        KeychainWrapper.standard.removeObject(forKey: "Auth token")
                         let alert = AlertService(
                             title: "Что-то пошло не так (",
                             message: "Не удалось войти в систему\n\(error.localizedDescription)",

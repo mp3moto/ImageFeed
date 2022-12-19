@@ -18,7 +18,7 @@ final class OAuth2TokenStorage {
         }
         set {
             if let token = newValue {
-                let result = KeychainWrapper.standard.set(token, forKey: "Auth token")
+                let result = KeychainWrapper.standard.set(token, forKey: key)
                 guard result, result == true else {
                     keychainError()
                     return

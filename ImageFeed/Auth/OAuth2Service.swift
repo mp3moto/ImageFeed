@@ -17,7 +17,7 @@ final class OAuth2Service {
             "grant_type": "authorization_code"
         ]
 
-        var req: RequestFactoryProtocol = RequestFactory()
+        let req: RequestFactoryProtocol = RequestFactory()
 
         guard let request = req.createRequest(
             url: UnsplashGetAuthTokenURL,

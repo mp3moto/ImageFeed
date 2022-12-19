@@ -24,14 +24,13 @@ final class OAuth2TokenStorage {
                     return
                 }
             }
-            
         }
     }
-    
+
     init(delegate: KeychainEventsProtocol? = nil) {
         self.delegate = delegate
     }
-    
+
     func keychainError() {
         delegate?.keychainError()
     }

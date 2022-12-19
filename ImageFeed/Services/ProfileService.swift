@@ -20,18 +20,16 @@ extension ProfileServiceError: LocalizedError {
         case .invalidTokenInFetchProfilePhoto:
             return NSLocalizedString("Invalid Unsplash AuthToken provided in FetchProfilePhoto", comment: "Please, authorize on Unsplash to get valid AuthToken")
         case .networkError:
-            return NSLocalizedString("Network error occured", comment: "")
+            return NSLocalizedString("Network error occured", comment: "Network error occured")
         }
     }
 }
 
 final class ProfileService {
     static let shared = ProfileService()
-    private let networkClient: NetworkRouting = NetworkClient()
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     private let profileImageService = ProfileImageService.shared
-    //weak var delegate: SplashViewControllerProtocol?
-    
+
     private var _profile: Profile?
     var profile: Profile? {
         get {
@@ -41,7 +39,7 @@ final class ProfileService {
             _profile = newValue
         }
     }
-    
+
     func fetchProfile(completion: @escaping (Result<Profile,Error>) -> Void) {
         if let token = storage.token {
             let req: RequestFactoryProtocol = RequestFactory()
@@ -58,8 +56,7 @@ final class ProfileService {
                 case .success(let profile):
                     self.profile = profile
                     completion(.success(profile))
-                case .failure(let error):
-                    print(error.localizedDescription)
+                case .failure(_):
                     completion(.failure(ProfileServiceError.invalidTokenInFetchProfileData))
                 }
             }

@@ -2,9 +2,9 @@ import UIKit
 import Kingfisher
 
 final class ProfileViewController: UIViewController {
-    
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    static let shared = ProfileViewController()
 
     @IBOutlet private weak var profileUserName: UILabel!
     @IBOutlet private weak var profileAccountName: UILabel!
@@ -24,26 +24,12 @@ final class ProfileViewController: UIViewController {
 
         present(alert, animated: true)
     }
-    
-    /*override init(nibName: String?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-        addObserver()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        addObserver()
-    }
-    
-    deinit {
-        removeObserver()
-    }*/
-    
+
     private var profileImageServiceObserver: NSObjectProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         profileImageServiceObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.DidChangeNotification,
             object: nil,
@@ -57,16 +43,16 @@ final class ProfileViewController: UIViewController {
             updateProfileDetails(profile: profile)
         }
     }
-    
-    private func updateAvatar() {
+
+    func updateAvatar() {
         guard
             let profileImageURL = profileImageService.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
-        
+
         profileImage.kf.setImage(with: url, placeholder: UIImage(named: "avatar"))
     }
-    
+
     private func updateProfileDetails(profile: Profile) {
         self.profileUserName.text = profile.name()
         self.profileAccountName.text = profile.username

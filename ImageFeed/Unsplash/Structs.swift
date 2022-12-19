@@ -14,7 +14,7 @@ struct Profile: Decodable {
     let first_name: String?
     let last_name: String?
     let bio: String?
-    
+
     func name() -> String? {
         var output: String?
         if let name = self.first_name {
@@ -38,10 +38,3 @@ struct ProfileImage: Decodable {
 struct UserResult: Decodable {
     let profile_image: ProfileImage
 }
-
-/*struct Profile: Codable {
-    let username: String?
-    let name: String?
-    let bio: String?
-    let image: String?
-}*/

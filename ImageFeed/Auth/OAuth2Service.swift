@@ -1,7 +1,6 @@
 import Foundation
 
 final class OAuth2Service {
-    private let networkClient: NetworkRouting
     private var UnsplashGetAuthTokenURL: URL {
         guard let url = URL(string: UnsplashGetAuthTokenURLString) else {
             preconditionFailure("Unable to construct UnsplashGetAuthTokenURLString")
@@ -17,9 +16,9 @@ final class OAuth2Service {
             "code": code,
             "grant_type": "authorization_code"
         ]
-        
+
         var req: RequestFactoryProtocol = RequestFactory()
-        
+
         guard let request = req.createRequest(
             url: UnsplashGetAuthTokenURL,
             method: "POST",
@@ -37,9 +36,5 @@ final class OAuth2Service {
             }
         }
         task.resume()
-    }
-
-    init(networkClient: NetworkRouting = NetworkClient()) {
-        self.networkClient = networkClient
     }
 }

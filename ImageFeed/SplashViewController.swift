@@ -3,28 +3,19 @@ import UIKit
 final class SplashViewController: UIViewController, SplashViewControllerProtocol, KeychainEventsProtocol {
     private let showTabBarViewSegueIdentifier = "ShowTabBarView"
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
-    private let networkClient: NetworkRouting = NetworkClient()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     static let shared = SplashViewController()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        /*
-        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        print(documentsURL) 
-        */
-        //profileService.delegate = self
         DispatchQueue.main.async {
             UIBlockingProgressHUD.show()
         }
-        //let profileService: ProfileService = ProfileService()
-        //print("0. profileService.fetchProfile")
-        
+
         profileService.fetchProfile(completion: { result in
             switch result {
             case .success(_):
-                //print("1. profileService.fetchProfile -> success")
                 DispatchQueue.main.async {
                     UIBlockingProgressHUD.dismiss()
                     if let username = self.profileService.profile?.username {
@@ -32,18 +23,28 @@ final class SplashViewController: UIViewController, SplashViewControllerProtocol
                             switch result {
                             case .success(_):
                                 break
-                                //print("2. profileImageService.fetchProfile -> success")
                             case .failure(let error):
-                                print(error.localizedDescription)
+                                let alert = AlertService(
+                                    title: "Ошибка",
+                                    message: error.localizedDescription,
+                                    buttonText: "ОК",
+                                    controller: self) { _ in }
+                                alert.show()
                             }
                         })
                         self.performSegue(withIdentifier: self.showTabBarViewSegueIdentifier, sender: nil)
                     } else {
-                        print("no username")
+                        let alert = AlertService(
+                            title: "Ошибка",
+                            message: "Не удалось получить имя профиля Unsplash",
+                            buttonText: "ОК",
+                            controller: self) { _ in
+                                self.performSegue(withIdentifier: showAuthViewSegueIdentifier, sender: nil)
+                            }
+                        alert.show()
                     }
                 }
             case .failure(let error):
-                //print("Failure catched")
                 DispatchQueue.main.async {
                     UIBlockingProgressHUD.dismiss()
                     if error as! ProfileServiceError == ProfileServiceError.emptyToken {
@@ -73,14 +74,14 @@ final class SplashViewController: UIViewController, SplashViewControllerProtocol
             super.prepare(for: segue, sender: sender)
         }
     }
-    
+
     func showImageFeed() {
         DispatchQueue.main.async {
             UIBlockingProgressHUD.dismiss()
             self.performSegue(withIdentifier: self.showTabBarViewSegueIdentifier, sender: nil)
         }
     }
-    
+
     func keychainError() {
         let alert = AlertService(
             title: "Ошибка",
@@ -89,5 +90,6 @@ final class SplashViewController: UIViewController, SplashViewControllerProtocol
             controller: self) { _ in
                 self.performSegue(withIdentifier: showAuthViewSegueIdentifier, sender: nil)
             }
+        alert.show()
     }
 }

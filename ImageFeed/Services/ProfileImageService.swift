@@ -2,17 +2,10 @@ import Foundation
 
 final class ProfileImageService {
     static let profileService = ProfileService.shared
-    private let networkClient: NetworkRouting = NetworkClient()
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     static let shared = ProfileImageService()
     static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
-    private var _avatarURL: String? {
-        didSet {
-            if let avatar = _avatarURL {
-                print("AvatarURL is \(avatar)")
-            }
-        }
-    }
+    private var _avatarURL: String?
     var avatarURL: String? {
         get {
             return _avatarURL
@@ -21,14 +14,12 @@ final class ProfileImageService {
             _avatarURL = newValue
         }
     }
-    
+
     func fetchProfileImageURL(username: String, completion: @escaping (Result<UserResult,Error>) -> Void) {
-        print("fetchProfileImageURL called")
         if let token = storage.token {
             let PublicProfileURL = URL(string: "https://api.unsplash.com/users/\(username)")
-            //print("username is \(username)")
-            
             let req: RequestFactoryProtocol = RequestFactory()
+
             guard let request = req.createRequest(
                 url: PublicProfileURL!,
                 method: "GET",
@@ -41,7 +32,7 @@ final class ProfileImageService {
                 switch result {
                 case .success(let userResult):
                     self.avatarURL = userResult.profile_image.large
-                    
+
                     if let avatarURL = self.avatarURL {
                         NotificationCenter.default.post(
                             name: ProfileImageService.DidChangeNotification,
@@ -49,13 +40,10 @@ final class ProfileImageService {
                             userInfo: ["URL": avatarURL]
                         )
                     }
-                    
                     completion(.success(userResult))
-                case .failure(let error):
-                    print(error.localizedDescription)
+                case .failure(_):
                     completion(.failure(ProfileServiceError.invalidTokenInFetchProfilePhoto))
                 }
-                
             }
             task.resume()
         } else {

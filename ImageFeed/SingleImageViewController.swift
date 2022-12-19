@@ -59,16 +59,9 @@ final class SingleImageViewController: UIViewController {
             scrollView.maximumZoomScale = ratio + (ratio * 0.25)
         }
 
-        /* Этот вариант мне очень нравится, потому что он напоминает поведение картинки в стандартном приложении "фото". Хочу оставить его на память
-         scrollView.setZoomScale(ratio, animated: false)
-         let imageCoords = getImageCoords(imageSize: image.size, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
-        */
-
-        /* А этот вариант я вынужден использовать, потому что такой дизайн */
         scrollView.maximumZoomScale = heightRatio + (heightRatio * 0.25)
         scrollView.setZoomScale(heightRatio, animated: false)
         let imageCoords = getImageCenterCoords(imageSize: image.size, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
-        /*  ---  */
 
         setImageCoords(coords: imageCoords)
     }

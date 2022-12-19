@@ -9,7 +9,6 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
     }
 
     @IBAction func didTapLoginButton(_ sender: Any) {
-        //var delay = Int(delayValue.text!)
         performSegue(withIdentifier: showWebViewSegueIdentifier, sender: sender)
     }
 
@@ -26,16 +25,22 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
         }
     }
 
-    func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String, delay: Int) -> Void {
+    func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) -> Void {
         let oauth: OAuth2Service = OAuth2Service()
         oauth.fetchAuthToken(code: code, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .failure(let error):
-                print(error.localizedDescription)
+            case .failure(_):
+                let alert = AlertService(
+                    title: "Ошибка",
+                    message: "Не удается получить токен авторизации",
+                    buttonText: "ОК",
+                    controller: self) { _ in
+                        self.performSegue(withIdentifier: showAuthViewSegueIdentifier, sender: nil)
+                    }
+                alert.show()
             case .success(let oauthTokenResponseBody):
                 if !oauthTokenResponseBody.access_token.isEmpty {
-                    //print("fetched token is \(oauthTokenResponseBody.access_token)")
                     self.storage.token = oauthTokenResponseBody.access_token
                     self.webViewViewtokenReceived(vc)
                 } else {

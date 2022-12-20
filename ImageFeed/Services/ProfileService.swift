@@ -5,6 +5,8 @@ enum ProfileServiceError: Error {
     case emptyUsername
     case invalidTokenInFetchProfileData
     case invalidTokenInFetchProfilePhoto
+    case invalidProfileURL
+    case invalidToken
     case networkError
 }
 
@@ -19,8 +21,12 @@ extension ProfileServiceError: LocalizedError {
             return NSLocalizedString("Invalid Unsplash AuthToken provided in FetchProfileData", comment: "Please, authorize on Unsplash to get valid AuthToken")
         case .invalidTokenInFetchProfilePhoto:
             return NSLocalizedString("Invalid Unsplash AuthToken provided in FetchProfilePhoto", comment: "Please, authorize on Unsplash to get valid AuthToken")
+        case .invalidProfileURL:
+            return NSLocalizedString("Invalid Unsplash profile URL", comment: "Invalid Unsplash profile URL")
         case .networkError:
             return NSLocalizedString("Network error occured", comment: "Network error occured")
+        case .invalidToken:
+            return NSLocalizedString("Invalid Unsplash AuthToken provided", comment: "Invalid Unsplash AuthToken provided")
         }
     }
 }

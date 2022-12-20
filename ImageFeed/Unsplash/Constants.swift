@@ -10,3 +10,4 @@ let UnsplashGetAuthTokenURLString = "https://unsplash.com/oauth/token"
 let ProfileDataURL = URL(string: "https://api.unsplash.com/me")
 let showAuthViewSegueIdentifier = "ShowAuthView"
 let showSplashViewSegueIdentifier = "ShowSplashView"
+let showTabBarViewSegueIdentifier = "ShowTabBarView"

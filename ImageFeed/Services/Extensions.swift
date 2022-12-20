@@ -5,6 +5,27 @@ enum NetworkError: Error {
     case dataError
 }
 
+extension URLError {
+    func errorDescription() -> String {
+        var message: String
+        switch code {
+        case .cancelled:
+          message = "Сервер разорвал соединение"
+        case .cannotFindHost:
+            message = "Не удается найти сервер"
+        case .notConnectedToInternet:
+            message = "Нет соединения с интернетом"
+        case .resourceUnavailable:
+            message = "Сайт Unsplash недоступен"
+        case .timedOut:
+            message = "Превышен лимит времени"
+        default:
+            message = "Неизвестная ошибка с кодом: \(code)"
+        }
+        return message
+    }
+}
+
 extension URLSession {
     func objectTask<T: Decodable>(
         for request: URLRequest,

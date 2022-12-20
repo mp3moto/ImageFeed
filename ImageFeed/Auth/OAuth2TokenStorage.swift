@@ -19,10 +19,9 @@ final class OAuth2TokenStorage {
         set {
             if let token = newValue {
                 let result = KeychainWrapper.standard.set(token, forKey: key)
-                guard result, result == true else {
-                    keychainError()
-                    return
-                }
+                if result == false { keychainError() } else { print("token stored in keychain") }
+            } else {
+                KeychainWrapper.standard.removeObject(forKey: key)
             }
         }
     }
@@ -34,4 +33,6 @@ final class OAuth2TokenStorage {
     func keychainError() {
         delegate?.keychainError()
     }
+    
+    
 }

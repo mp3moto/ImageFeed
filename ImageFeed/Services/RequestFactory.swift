@@ -7,10 +7,8 @@ final class RequestFactory: RequestFactoryProtocol {
         switch method {
         case "POST":
             httpMethod = method
-            break
         default:
             httpMethod = "GET"
-            break
         }
 
         var userData: [String: String] = [:]

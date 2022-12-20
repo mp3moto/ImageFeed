@@ -17,11 +17,16 @@ final class ProfileImageService {
 
     func fetchProfileImageURL(username: String, completion: @escaping (Result<UserResult,Error>) -> Void) {
         if let token = storage.token {
-            let PublicProfileURL = URL(string: "https://api.unsplash.com/users/\(username)")
+            guard let publicProfileURL = URL(string: "https://api.unsplash.com/users/\(username)") else {
+                completion(.failure(ProfileServiceError.invalidTokenInFetchProfilePhoto))
+                print("guard catched")
+                return
+            }
+            print("guard passed")
             let req: RequestFactoryProtocol = RequestFactory()
 
             guard let request = req.createRequest(
-                url: PublicProfileURL!,
+                url: publicProfileURL,
                 method: "GET",
                 postData: nil,
                 headers: ["Authorization": "Bearer \(token)"],

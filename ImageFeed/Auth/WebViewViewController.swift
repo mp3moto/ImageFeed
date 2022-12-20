@@ -59,51 +59,19 @@ extension WebViewViewController: WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        /*print("error occured")
-        let nserr = error as NSError
-        if nserr.code != 102 {
-            print("nserr.code = \(nserr.code)")
-            if let error = error as? URLError {
-                print("error.code = \(error.code)")
-            }
+        if let err = error as? URLError {
+            let message = err.errorDescription()
             let alert = AlertService(
                 title: "Ошибка",
-                message: "Нет соединения с сайтом Unsplash или интернетом",
+                message: "\(message)",
                 buttonText: "ОК",
                 controller: self) { _ in
                     self.authDelegate?.webViewViewControllerDidCancel(self)
                 }
             alert.show()
-        }*/
-        
-        if let err = error as? URLError {
-            var message: String?
-            switch(err.code) {
-            case .cancelled:
-              message = "Сервер разорвал соединение"
-            case .cannotFindHost:
-                message = "Не удается найти сервер"
-            case .notConnectedToInternet:
-                message = "Нет соединения с интернетом"
-            case .resourceUnavailable:
-                message = "Сайт Unsplash недоступен"
-            case .timedOut:
-                message = "Превышен лимит времени"
-            default:
-                message = "Неизвестная ошибка с кодом: \(err.code)"
-            }
-            if let message = message {
-                let alert = AlertService(
-                    title: "Ошибка",
-                    message: "\(message)",
-                    buttonText: "ОК",
-                    controller: self) { _ in
-                        self.authDelegate?.webViewViewControllerDidCancel(self)
-                    }
-                alert.show()
-            } else {
+            /*} else {
                 self.authDelegate?.webViewViewControllerDidCancel(self)
-            }
+            }*/
         }
     }
 

@@ -1,25 +1,35 @@
 import UIKit
 
 class AlertService {
+    /*
     private let title: String
     private let message: String
     private let buttonText: String
+    */
     private let controller: UIViewController
+    /*
     private let actionHandler: ((UIAlertAction) -> Void)?
-
+    */
     init(
-        title: String,
+        /*title: String,
         message: String,
-        buttonText: String,
-        controller: UIViewController,
+        buttonText: String,*/
+        controller: UIViewController
+        /*
         actionHandler: ((UIAlertAction) -> Void)?
+        */
     ) {
-        self.title = title
+        /*self.title = title
         self.message = message
-        self.buttonText = buttonText
+        self.buttonText = buttonText*/
         self.controller = controller
-        self.actionHandler = actionHandler
+        //self.actionHandler = actionHandler
     }
+    
+    func showAlert(error: Error) {
+        
+    }
+    /*
     func show(_ id: String? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         if let id = id {
@@ -37,4 +47,5 @@ class AlertService {
             self.controller.present(alert, animated: true, completion: nil)
         }
     }
+     */
 }

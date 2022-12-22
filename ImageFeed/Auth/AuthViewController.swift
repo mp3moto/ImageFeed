@@ -1,10 +1,12 @@
 import UIKit
-import WebKit
 
 final class AuthViewController: UIViewController, WebViewViewControllerProtocol {
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
-    //private
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
+    private var tabBarSeguePerformed: Int = 0
+    static let shared = AuthViewController()
     private enum Keys: String {
         case access_token
     }
@@ -15,7 +17,7 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //splash.destroyView()
+        tabBarSeguePerformed = 0
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -29,28 +31,25 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
 
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) -> Void {
         vc.dismiss(animated: true)
+        DispatchQueue.main.async {
+            UIBlockingProgressHUD.show()
+        }
         let oauth: OAuth2Service = OAuth2Service()
         oauth.fetchAuthToken(code: code, completion: { [weak self] result in
             guard let self = self else { return }
+            DispatchQueue.main.async {
+                UIBlockingProgressHUD.show()
+            }
             let alertService: AlertService = AlertService(controller: self)
             switch result {
-            case .failure:
-                alertService.showAlert(error: ProfileServiceError.invalidToken)
-                /*let alert = AlertService(
-                    title: "Ошибка",
-                    message: "Не удается получить токен авторизации",
-                    buttonText: "ОК",
-                    controller: self) { [weak self] _ in
-                        self?.performSegue(withIdentifier: showAuthViewSegueIdentifier, sender: nil)
-                    }
-                alert.show()*/
+            case .failure(let error):
+                alertService.showAlert(error: error)
             case .success(let oauthTokenResponseBody):
                 if !oauthTokenResponseBody.access_token.isEmpty {
                     self.storage.token = oauthTokenResponseBody.access_token
-                    self.webViewViewtokenReceived(/*vc*/)
+                    self.webViewViewtokenReceived()
                 } else {
-                    alertService.showAlert(error: ProfileServiceError.emptyToken)
-                    //print("error occured: access_token is empty")
+                    alertService.showAlert(error: ImageFeedError.emptyToken)
                 }
             }
         })
@@ -60,32 +59,32 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
         vc.dismiss(animated: true)
     }
 
-    func webViewViewtokenReceived(/*_ vc: WebViewViewController*/) {
-        let profileService: ProfileService = ProfileService()
-        DispatchQueue.main.async {
-            UIBlockingProgressHUD.show()
-            profileService.fetchProfile(completion: { [weak self] result in
-                guard let self = self else { return }
-                let alertService: AlertService = AlertService(controller: self)
-                switch result {
-                case .success:
-                    UIBlockingProgressHUD.dismiss()
-                    if let username = profileService.profile?.username {
-                        let profileImage: ProfileImageService = ProfileImageService()
-                        profileImage.fetchProfileImageURL(username: username, completion: { result in
-                            if case let .failure(error) = result {
-                                alertService.showAlert(error: error)
-                            }
-                        })
-                        self.performSegue(withIdentifier: showTabBarViewSegueIdentifier, sender: nil)
+    func webViewViewtokenReceived() {
+        profileService.fetchProfile(completion: { [weak self] result in
+            guard let self = self else { return }
+            let alertService: AlertService = AlertService(controller: self)
+            switch result {
+            case .success:
+                UIBlockingProgressHUD.dismiss()
+                if let username = self.profileService.profile?.username {
+                    self.profileImageService.fetchProfileImageURL(username: username, completion: { result in
+                        if case let .failure(error) = result {
+                            alertService.showAlert(error: error)
+                        }
+                    })
+                    if self.tabBarSeguePerformed == 0 {
+                        self.tabBarSeguePerformed = 1
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: showTabBarViewSegueIdentifier, sender: nil)
+                        }
                     }
-                    else {
-                        alertService.showAlert(error: ProfileServiceError.emptyUsername)
-                    }
-                case .failure(let error):
-                    alertService.showAlert(error: error)
                 }
-            })
-        }
+                else {
+                    alertService.showAlert(error: ImageFeedError.emptyUsername)
+                }
+            case .failure(let error):
+                alertService.showAlert(error: error)
+            }
+        })
     }
 }

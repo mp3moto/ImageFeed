@@ -1,8 +1,37 @@
 import Foundation
 
-enum NetworkError: Error {
-    case codeError
+enum ImageFeedError: Error {
+    case emptyToken
+    case emptyUsername
+    case invalidAvatar
+    case invalidCode
+    case invalidToken
+    case invalidProfileURL
+    case networkError
     case dataError
+}
+
+extension ImageFeedError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .emptyToken:
+            return NSLocalizedString("Пустой токен авторизации", comment: "")
+        case .emptyUsername:
+            return NSLocalizedString("Некорректное имя пользователя", comment: "")
+        case .invalidCode:
+            return NSLocalizedString("Некорректный код авторизации", comment: "")
+        case .invalidProfileURL:
+            return NSLocalizedString("Некорректный адрес страницы пользователя", comment: "")
+        case .networkError:
+            return NSLocalizedString("Ошибка сети", comment: "")
+        case .invalidToken:
+            return NSLocalizedString("Недействительный токен авторизации", comment: "")
+        case .invalidAvatar:
+            return NSLocalizedString("Не удалось загрузить аватар пользователя", comment: "")
+        case .dataError:
+            return NSLocalizedString("Некорректный формат данных с сервера", comment: "")
+        }
+    }
 }
 
 extension URLError {
@@ -36,7 +65,7 @@ extension URLSession {
                 completion(.failure(error))
             }
             if let response = response as? HTTPURLResponse, response.statusCode < 200 || response.statusCode >= 300 {
-                completion(.failure(NetworkError.codeError))
+                completion(.failure(ImageFeedError.networkError))
             }
             guard let data = data else {
                 return
@@ -45,7 +74,7 @@ extension URLSession {
                 let JSONtoStruct = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(JSONtoStruct))
             } catch {
-                completion(.failure(NetworkError.dataError))
+                completion(.failure(ImageFeedError.dataError))
             }
         })
         return task

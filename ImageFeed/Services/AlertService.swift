@@ -1,45 +1,35 @@
 import UIKit
 
 class AlertService {
-    /*
-    private let title: String
-    private let message: String
-    private let buttonText: String
-    */
     private let controller: UIViewController
-    /*
-    private let actionHandler: ((UIAlertAction) -> Void)?
-    */
-    init(
-        /*title: String,
-        message: String,
-        buttonText: String,*/
-        controller: UIViewController
-        /*
-        actionHandler: ((UIAlertAction) -> Void)?
-        */
-    ) {
-        /*self.title = title
-        self.message = message
-        self.buttonText = buttonText*/
+
+    init(controller: UIViewController) {
         self.controller = controller
-        //self.actionHandler = actionHandler
     }
-    
+
     func showAlert(error: Error) {
-        
-    }
-    /*
-    func show(_ id: String? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        if let id = id {
-            alert.view.accessibilityIdentifier = id
+        DispatchQueue.main.async {
+            UIBlockingProgressHUD.dismiss()
         }
+        let alert = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
         let action = UIAlertAction(
-            title: self.buttonText,
+            title: "OK",
+            style: .default,
+            handler: { action in })
+
+        alert.addAction(action)
+        DispatchQueue.main.async {
+            self.controller.present(alert, animated: true, completion: nil)
+        }
+    }
+
+    func showCustomAlert(title: String, message: String, buttonText: String, actionHandler: ((UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(
+            title: buttonText,
             style: .default,
             handler: { action in
-                self.actionHandler?(action)
+                actionHandler?(action)
             })
 
         alert.addAction(action)
@@ -47,5 +37,4 @@ class AlertService {
             self.controller.present(alert, animated: true, completion: nil)
         }
     }
-     */
 }

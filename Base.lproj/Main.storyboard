@@ -119,7 +119,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="742" y="542"/>
+            <point key="canvasLocation" x="735" y="421"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="9dK-nF-EeX">
@@ -143,12 +143,12 @@
                     <navigationItem key="navigationItem" id="Moq-9k-WTi"/>
                     <connections>
                         <segue destination="vba-8v-hsg" kind="presentation" identifier="ShowAuthView" modalPresentationStyle="fullScreen" id="XLK-1t-sXV"/>
-                        <segue destination="OHT-VX-YMa" kind="presentation" identifier="ShowTabBarView" modalPresentationStyle="fullScreen" id="bwB-hH-ACT"/>
+                        <segue destination="OHT-VX-YMa" kind="presentation" identifier="ShowTabBarView" modalPresentationStyle="fullScreen" id="61f-BI-8VE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wfs-yZ-mr4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1358.4615384615383" y="-296.44549763033172"/>
+            <point key="canvasLocation" x="-198" y="-318"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="GkD-NH-LPf">
@@ -196,6 +196,7 @@
                     <navigationItem key="navigationItem" id="ZQY-K6-gKR"/>
                     <connections>
                         <segue destination="JwJ-5S-45k" kind="presentation" identifier="ShowWebView" modalPresentationStyle="fullScreen" id="T1f-YR-6Cb"/>
+                        <segue destination="OHT-VX-YMa" kind="presentation" identifier="ShowTabBarView" modalPresentationStyle="fullScreen" id="m33-oM-BaG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g6p-zE-fBq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -252,7 +253,6 @@
                     <connections>
                         <outlet property="WebViewViewController" destination="l2M-GJ-Eau" id="gHr-kI-PP0"/>
                         <outlet property="progressView" destination="fdF-kU-zTH" id="QYy-Ty-wiv"/>
-                        <segue destination="8qj-hv-lc2" kind="presentation" identifier="ShowSplashView" modalPresentationStyle="fullScreen" id="XaZ-Jc-xZu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YVJ-SB-amT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -284,7 +284,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xg8-q1-W7M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1358" y="-296"/>
+            <point key="canvasLocation" x="2028" y="-318"/>
         </scene>
         <!--ProfileView-->
         <scene sceneID="FIk-e4-RuG">
@@ -368,7 +368,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N00-Q2-7pU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3397" y="439"/>
+            <point key="canvasLocation" x="3397" y="421"/>
         </scene>
         <!--Single Image View Controller-->
         <scene sceneID="mkj-lS-P1h">
@@ -449,6 +449,9 @@
             <point key="canvasLocation" x="1157" y="1214"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="61f-BI-8VE"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="0" width="4000" height="5256"/>
         <image name="18" width="200" height="300"/>

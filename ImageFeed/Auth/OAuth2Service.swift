@@ -7,8 +7,23 @@ final class OAuth2Service {
         }
         return url
     }
+    private var lastCode: String?
+    private var task: URLSessionTask?
 
     func fetchAuthToken(code: String, completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) {
+        if task != nil {
+            if code != lastCode {
+                task?.cancel()
+                lastCode = code
+            } else {
+                return
+            }
+        } else {
+            if code == lastCode {
+                return
+            }
+        }
+
         let postData: [String: Any] = [
             "client_id": AccessKey,
             "client_secret": SecretKey,
@@ -31,10 +46,11 @@ final class OAuth2Service {
             switch result {
             case .success(let oauthTokenResponse):
                 completion(.success(oauthTokenResponse))
-            case .failure(let error):
-                completion(.failure(error))
+            case .failure:
+                completion(.failure(ImageFeedError.invalidCode))
             }
         }
+        self.task = task
         task.resume()
     }
 }

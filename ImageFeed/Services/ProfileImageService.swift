@@ -1,28 +1,26 @@
 import Foundation
 
 final class ProfileImageService {
-    static let profileService = ProfileService.shared
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     static let shared = ProfileImageService()
     static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
-    private var _avatarURL: String?
+    private var tempAvatarURL: String?
     var avatarURL: String? {
         get {
-            return _avatarURL
+            return tempAvatarURL
         }
         set {
-            _avatarURL = newValue
+            tempAvatarURL = newValue
         }
     }
 
     func fetchProfileImageURL(username: String, completion: @escaping (Result<UserResult,Error>) -> Void) {
         if let token = storage.token {
             guard let publicProfileURL = URL(string: "https://api.unsplash.com/users/\(username)") else {
-                completion(.failure(ProfileServiceError.invalidTokenInFetchProfilePhoto))
-                print("guard catched")
+                completion(.failure(ImageFeedError.invalidProfileURL))
                 return
             }
-            print("guard passed")
+
             let req: RequestFactoryProtocol = RequestFactory()
 
             guard let request = req.createRequest(
@@ -46,13 +44,13 @@ final class ProfileImageService {
                         )
                     }
                     completion(.success(userResult))
-                case .failure(_):
-                    completion(.failure(ProfileServiceError.invalidTokenInFetchProfilePhoto))
+                case .failure:
+                    completion(.failure(ImageFeedError.invalidAvatar))
                 }
             }
             task.resume()
         } else {
-            completion(.failure(ProfileServiceError.emptyToken))
+            completion(.failure(ImageFeedError.emptyToken))
         }
     }
 }

@@ -1,48 +1,17 @@
 import Foundation
 
-enum ProfileServiceError: Error {
-    case emptyToken
-    case emptyUsername
-    case invalidTokenInFetchProfileData
-    case invalidTokenInFetchProfilePhoto
-    case invalidProfileURL
-    case invalidToken
-    case networkError
-}
-
-extension ProfileServiceError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .emptyToken:
-            return NSLocalizedString("Empty Unsplash AuthToken provided", comment: "Please, authorize on Unsplash to get AuthToken")
-        case .emptyUsername:
-            return NSLocalizedString("Can't get user's photo", comment: "Please check your Unsplash profile")
-        case .invalidTokenInFetchProfileData:
-            return NSLocalizedString("Invalid Unsplash AuthToken provided in FetchProfileData", comment: "Please, authorize on Unsplash to get valid AuthToken")
-        case .invalidTokenInFetchProfilePhoto:
-            return NSLocalizedString("Invalid Unsplash AuthToken provided in FetchProfilePhoto", comment: "Please, authorize on Unsplash to get valid AuthToken")
-        case .invalidProfileURL:
-            return NSLocalizedString("Invalid Unsplash profile URL", comment: "Invalid Unsplash profile URL")
-        case .networkError:
-            return NSLocalizedString("Network error occured", comment: "Network error occured")
-        case .invalidToken:
-            return NSLocalizedString("Invalid Unsplash AuthToken provided", comment: "Invalid Unsplash AuthToken provided")
-        }
-    }
-}
-
 final class ProfileService {
     static let shared = ProfileService()
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
-    private let profileImageService = ProfileImageService.shared
+    //private let profileImageService = ProfileImageService.shared
 
-    private var _profile: Profile?
+    private var tempProfile: Profile?
     var profile: Profile? {
         get {
-            return _profile
+            return tempProfile
         }
         set {
-            _profile = newValue
+            tempProfile = newValue
         }
     }
 
@@ -61,14 +30,15 @@ final class ProfileService {
                 switch result {
                 case .success(let profile):
                     self.profile = profile
+                    guard let _ = profile.username else { return }
                     completion(.success(profile))
-                case .failure(_):
-                    completion(.failure(ProfileServiceError.invalidTokenInFetchProfileData))
+                case .failure:
+                    completion(.failure(ImageFeedError.invalidToken))
                 }
             }
             task.resume()
         } else {
-            completion(.failure(ProfileServiceError.emptyToken))
+            completion(.failure(ImageFeedError.emptyToken))
         }
     }
 }

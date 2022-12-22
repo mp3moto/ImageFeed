@@ -4,7 +4,6 @@ import Kingfisher
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
-    static let shared = ProfileViewController()
 
     @IBOutlet private weak var profileUserName: UILabel!
     @IBOutlet private weak var profileAccountName: UILabel!
@@ -30,7 +29,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
+        NotificationCenter.default.addObserver(
             forName: ProfileImageService.DidChangeNotification,
             object: nil,
             queue: .main
@@ -48,8 +47,9 @@ final class ProfileViewController: UIViewController {
         guard
             let profileImageURL = profileImageService.avatarURL,
             let url = URL(string: profileImageURL)
-        else { return }
-
+        else {
+            return
+        }
         profileImage.kf.setImage(with: url, placeholder: UIImage(named: "avatar"))
     }
 

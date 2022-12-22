@@ -3,7 +3,6 @@ import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
     private let userDefaults = UserDefaults.standard
-    private let delegate: KeychainEventsProtocol?
     let key = "Auth token"
     private enum Keys: String {
         case access_token
@@ -18,21 +17,10 @@ final class OAuth2TokenStorage {
         }
         set {
             if let token = newValue {
-                let result = KeychainWrapper.standard.set(token, forKey: key)
-                if result == false { keychainError() } else { print("token stored in keychain") }
+                KeychainWrapper.standard.set(token, forKey: key)
             } else {
                 KeychainWrapper.standard.removeObject(forKey: key)
             }
         }
     }
-
-    init(delegate: KeychainEventsProtocol? = nil) {
-        self.delegate = delegate
-    }
-
-    func keychainError() {
-        delegate?.keychainError()
-    }
-    
-    
 }

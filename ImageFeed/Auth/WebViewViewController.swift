@@ -4,7 +4,7 @@ import WebKit
 final class WebViewViewController: UIViewController{
     weak var authDelegate: WebViewViewControllerProtocol?
     private var estimatedProgressObservation: NSKeyValueObservation?
-    
+
     @IBOutlet private weak var webViewViewController: WKWebView!
     @IBOutlet private weak var progressView: UIProgressView!
     @IBAction func didTapBackButton(_ sender: Any) {
@@ -24,21 +24,14 @@ final class WebViewViewController: UIViewController{
         let url = urlComponents.url!
         let request = URLRequest(url: url)
         webViewViewController.load(request)
-        
+
         estimatedProgressObservation = webViewViewController.observe(
             \.estimatedProgress,
              changeHandler: { [weak self] _, _ in
                  guard let self = self else { return }
                  self.updateProgress()
-             })
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showSplashViewSegueIdentifier {
-            _ = segue.destination as! SplashViewController
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
+             }
+        )
     }
 
     private func updateProgress() {
@@ -57,21 +50,15 @@ extension WebViewViewController: WKNavigationDelegate {
             decisionHandler(.allow)
         }
     }
-    
+
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         if let err = error as? URLError {
             let message = err.errorDescription()
-            let alert = AlertService(
-                title: "Ошибка",
-                message: "\(message)",
-                buttonText: "ОК",
-                controller: self) { _ in
-                    self.authDelegate?.webViewViewControllerDidCancel(self)
-                }
-            alert.show()
-            /*} else {
-                self.authDelegate?.webViewViewControllerDidCancel(self)
-            }*/
+            let alert = AlertService(controller: self)
+            alert.showCustomAlert(title: "Ошибка", message: message, buttonText: "ОК") { [weak self] _ in
+                guard let self = self else { return }
+                self.dismiss(animated: true)
+            }
         }
     }
 

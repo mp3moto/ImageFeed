@@ -1,12 +1,15 @@
 import UIKit
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
-    var image = UIImage() {
+    var imageURLPath: String?
+    //private var imageSize: CGSize?
+    /*var image = UIImage() {
         didSet {
             guard isViewLoaded else { return }
             imageView.image = image
         }
-    }
+    }*/
 
     struct OptionalCoordinates {
         let x: CGFloat?
@@ -30,27 +33,35 @@ final class SingleImageViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     @IBAction func didTapShareButton(_ sender: Any) {
-        let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        let activityController = UIActivityViewController(activityItems: [imageView.image!], applicationActivities: nil)
         present(activityController, animated: true)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
-        let imageSize = image.size
+        
+        guard let imageURLPath = imageURLPath,
+              let imageURL = URL(string: imageURLPath)
+        else {
+            imageView.image = UIImage(named: "Stub")
+            return
+        }
+        
+        imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "Stub"))
+        let imageSize = CGSize(width: imageView.bounds.width, height: imageView.bounds.height)
         let containerSize = scrollView.bounds.size
         var widthRatio, heightRatio, ratio: CGFloat
         view.layoutIfNeeded()
-
+        
         widthRatio = containerSize.width / imageSize.width
         heightRatio = containerSize.height / imageSize.height
-
+        
         if widthRatio < heightRatio {
             ratio = widthRatio
         } else {
             ratio = heightRatio
         }
-
+        
         scrollView.minimumZoomScale = ratio
         if ratio < 1 {
             scrollView.maximumZoomScale = 1.25
@@ -58,11 +69,11 @@ final class SingleImageViewController: UIViewController {
         else {
             scrollView.maximumZoomScale = ratio + (ratio * 0.25)
         }
-
+        
         scrollView.maximumZoomScale = heightRatio + (heightRatio * 0.25)
         scrollView.setZoomScale(heightRatio, animated: false)
-        let imageCoords = getImageCenterCoords(imageSize: image.size, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
-
+        
+        let imageCoords = getImageCenterCoords(imageSize: imageSize, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
         setImageCoords(coords: imageCoords)
     }
 
@@ -107,7 +118,8 @@ extension SingleImageViewController: UIScrollViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let imageCoords = getImageCoords(imageSize: self.image.size, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
+        let imageSize = CGSize(width: imageView.bounds.width, height: imageView.bounds.height)
+        let imageCoords = getImageCoords(imageSize: imageSize, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
         setImageCoords(coords: imageCoords)
     }
 }

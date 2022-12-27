@@ -25,7 +25,7 @@ class ImagesListViewController: UIViewController {
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-            print("closure of addObserver")
+            //print("closure of addObserver")
             self.updateTableViewAnimated()
         }
     }
@@ -45,7 +45,7 @@ class ImagesListViewController: UIViewController {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("imagesList.photos.count = \(imagesList.photos.count)")
+        //print("imagesList.photos.count = \(imagesList.photos.count)")
         return imagesList.photos.count
     }
 
@@ -71,10 +71,7 @@ extension ImagesListViewController: UITableViewDataSource {
         if segue.identifier == showSingleImageSegueIdentifier {
             let viewController = segue.destination as! SingleImageViewController
             let indexPath = sender as! IndexPath
-            guard let imageURLPath = imagesList.photos[indexPath.row].largeImageURL//,
-                  //let imageSize = imagesList.photos[indexPath.row].size
-            else { return }
-            viewController.imageURLPath = imageURLPath
+            viewController.photo = imagesList.photos[indexPath.row]
         }
         else {
             super.prepare(for: segue, sender: sender)

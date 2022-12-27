@@ -71,7 +71,7 @@ extension URLSession {
                 return
             }
             do {
-                print(String(decoding: data, as: UTF8.self))
+                //print(String(decoding: data, as: UTF8.self))
                 let JSONtoStruct = try JSONDecoder().decode(T.self, from: data)
                 //print(JSONtoStruct)
                 completion(.success(JSONtoStruct))

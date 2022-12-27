@@ -2,14 +2,14 @@ import UIKit
 import Kingfisher
 
 final class SingleImageViewController: UIViewController {
-    var imageURLPath: String?
+    var photo: Photo?
     //private var imageSize: CGSize?
-    /*var image = UIImage() {
+    var image = UIImage() {
         didSet {
             guard isViewLoaded else { return }
-            imageView.image = image
+            //imageView.image = image
         }
-    }*/
+    }
 
     struct OptionalCoordinates {
         let x: CGFloat?
@@ -36,45 +36,54 @@ final class SingleImageViewController: UIViewController {
         let activityController = UIActivityViewController(activityItems: [imageView.image!], applicationActivities: nil)
         present(activityController, animated: true)
     }
-
+    /*
+    private func getQueryStringParameter(url: String, param: String) -> String? {
+        guard let url = URLComponents(string: url) else { return nil }
+        return url.queryItems?.first(where: { $0.name == param })?.value
+    }
+    */
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let imageURLPath = imageURLPath,
-              let imageURL = URL(string: imageURLPath)
-        else {
-            imageView.image = UIImage(named: "Stub")
-            return
+        guard let photo = photo,
+              let imageURL = URL(string: photo.fullImageURL)
+        else { return }
+        
+        print(photo)
+        /*if let newWidth = getQueryStringParameter(url: photo.largeImageURL, param: "w") {
+            print("newWidth = \(newWidth)")
+        }*/
+        imageView.kf.indicatorType = .activity
+        //imageView.kf.
+        imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "Stub")) { _ in
+            let imageSize = photo.size
+            let containerSize = self.scrollView.bounds.size
+            var widthRatio, heightRatio, ratio: CGFloat
+            self.view.layoutIfNeeded()
+            
+            widthRatio = containerSize.width / imageSize.width
+            heightRatio = containerSize.height / imageSize.height
+            
+            if widthRatio < heightRatio {
+                ratio = widthRatio
+            } else {
+                ratio = heightRatio
+            }
+            
+            self.scrollView.minimumZoomScale = ratio
+            if ratio < 1 {
+                self.scrollView.maximumZoomScale = 1.25
+            }
+            else {
+                self.scrollView.maximumZoomScale = ratio + (ratio * 0.25)
+            }
+            
+            self.scrollView.maximumZoomScale = heightRatio + (heightRatio * 0.25)
+            self.scrollView.setZoomScale(heightRatio, animated: false)
+            
+            let imageCoords = self.getImageCenterCoords(imageSize: imageSize, containerSize: self.scrollView.bounds.size, scale: self.scrollView.zoomScale)
+            self.setImageCoords(coords: imageCoords)
         }
-        
-        imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "Stub"))
-        let imageSize = CGSize(width: imageView.bounds.width, height: imageView.bounds.height)
-        let containerSize = scrollView.bounds.size
-        var widthRatio, heightRatio, ratio: CGFloat
-        view.layoutIfNeeded()
-        
-        widthRatio = containerSize.width / imageSize.width
-        heightRatio = containerSize.height / imageSize.height
-        
-        if widthRatio < heightRatio {
-            ratio = widthRatio
-        } else {
-            ratio = heightRatio
-        }
-        
-        scrollView.minimumZoomScale = ratio
-        if ratio < 1 {
-            scrollView.maximumZoomScale = 1.25
-        }
-        else {
-            scrollView.maximumZoomScale = ratio + (ratio * 0.25)
-        }
-        
-        scrollView.maximumZoomScale = heightRatio + (heightRatio * 0.25)
-        scrollView.setZoomScale(heightRatio, animated: false)
-        
-        let imageCoords = getImageCenterCoords(imageSize: imageSize, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
-        setImageCoords(coords: imageCoords)
     }
 
     private func getImageCoords(imageSize: CGSize, containerSize: CGSize, scale: CGFloat = 1.0) -> OptionalCoordinates {

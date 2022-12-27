@@ -6,8 +6,6 @@ final class ImagesListService {
     private var nextPage: Int?
     var lastPhotosCount: Int = 0
     private var task, likeTask: URLSessionTask?
-    
-    //static let shared = ImagesListService()
     static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
     private func getNextPage() -> Int {
@@ -15,6 +13,14 @@ final class ImagesListService {
             return nextPage
         } else {
             return 1
+        }
+    }
+    
+    private func setNextPage() {
+        if let nextPage = self.nextPage {
+            self.nextPage = nextPage + 1
+        } else {
+            self.nextPage = 2
         }
     }
     
@@ -63,59 +69,80 @@ final class ImagesListService {
         }
     }
     
+    func convert(photo: PhotoResult) -> Photo? {
+        guard let id = photo.id,
+              let width = photo.width,
+              width > 0,
+              let height = photo.height,
+              height > 0,
+              let urls = photo.urls,
+              let thumbImageURL = urls.small,
+              let _ = URL(string: thumbImageURL),
+              let largeImageURL = urls.regular,
+              let _ = URL(string: largeImageURL),
+              let fullImageURL = urls.full,
+              let _ = URL(string: fullImageURL)
+        else { return nil }
+        
+        let createdAt: Date?
+        if let tmp = photo.created_at {
+            let dateFormatter = ISO8601DateFormatter()
+            createdAt = dateFormatter.date(from: tmp)
+        } else {
+            createdAt = nil
+        }
+        
+        let isLiked: Bool
+        if let liked = photo.liked_by_user {
+            isLiked = liked ? true : false
+        } else {
+            isLiked = false
+        }
+        
+        let welcomeDescription: String?
+        if let tmp = photo.description {
+            welcomeDescription = tmp
+        } else {
+            welcomeDescription = nil
+        }
+        
+        return Photo(
+            id: id,
+            size: CGSize(width: width, height: height),
+            createdAt: createdAt,
+            welcomeDescription: welcomeDescription,
+            thumbImageURL: thumbImageURL,
+            largeImageURL: largeImageURL,
+            fullImageURL: fullImageURL,
+            isLiked: isLiked
+        )
+    }
+    
     func fetchPhotosNextPage() {
         if let _ = task {
             return
         } else {
             guard let request = makePhotosRequest() else { return }
-            print(request)
+            //print(request)
             let session = URLSession.shared
             let task = session.objectTask(for: request) { (result: Result<[PhotoResult], Error>) in
                 self.task = nil
                 switch result {
                 case .success(let photoResults):
-                    if let nextPage = self.nextPage {
-                        self.nextPage = nextPage + 1
-                    } else {
-                        self.nextPage = 2
-                    }
-
+                    self.setNextPage()
                     DispatchQueue.main.async {
                         for photo in photoResults {
-                            let size = CGSize(width: Double(photo.width), height: Double(photo.height))
-                            let date: Date?
-                            
-                            if let tmp = photo.created_at {
-                                let dateFormatter = ISO8601DateFormatter()
-                                date = dateFormatter.date(from: tmp)!
-                            } else {
-                                date = nil
+                            if let newPhoto = self.convert(photo: photo) {
+                                self.photos.append(newPhoto)
                             }
-                            
-                            let welcomeDescription: String?
-                            if let tmp = photo.description {
-                                welcomeDescription = tmp
-                            } else {
-                                welcomeDescription = nil
-                            }
-                            
-                            let largeImageURL: String?
-                            if let tmp = photo.urls.regular {
-                                largeImageURL = tmp
-                            } else {
-                                largeImageURL = nil
-                            }
-                            
-                            self.photos.append(Photo(id: photo.id, size: size, createdAt: date, welcomeDescription: welcomeDescription, thumbImageURL: photo.urls.small, largeImageURL: largeImageURL, isLiked: photo.liked_by_user))
                         }
-                        
+
                         NotificationCenter.default.post(
                             name: ImagesListService.DidChangeNotification,
                             object: self,
                             userInfo: ["photos": self.photos]
                         )
                      }
-                    
                 case .failure:
                     return
                 }
@@ -130,40 +157,21 @@ final class ImagesListService {
             return
         } else {
             guard let request = makeLikeRequest(id: id, isLike: isLike) else { return }
-            print(request)
+            //print(request)
             let session = URLSession.shared
             let task = session.objectTask(for: request) { (result: Result<LikeResult, Error>) in
                 self.likeTask = nil
                 switch result {
                 case .success(let likeResult):
-                    //print("toggleLike result is")
-                   // print(photoResult)
                     DispatchQueue.main.async {
                         if let index = self.photos.firstIndex(where: { $0.id == id }) {
-                            //let photo = self.photos[index]
-                            let date: Date?
-                            if let tmp = likeResult.photo.created_at {
-                                let dateFormatter = ISO8601DateFormatter()
-                                date = dateFormatter.date(from: tmp)!
-                            } else {
-                                date = nil
+                            if let newPhoto = self.convert(photo: likeResult.photo) {
+                                self.photos[index] = newPhoto
+                                completion(.success(newPhoto.isLiked))
                             }
-                            let newPhoto = Photo(
-                                id: likeResult.photo.id,
-                                size: CGSize(width: likeResult.photo.width, height: likeResult.photo.height),
-                                createdAt: date,
-                                welcomeDescription: likeResult.photo.description,
-                                thumbImageURL: likeResult.photo.urls.small,
-                                largeImageURL: likeResult.photo.urls.regular,
-                                isLiked: likeResult.photo.liked_by_user
-                            )
-                            self.photos[index] = newPhoto
-                            completion(.success(newPhoto.isLiked))
                         }
                     }
-                    return
                 case .failure(let error):
-                    print(error.localizedDescription)
                     completion(.failure(error))
                 }
             }

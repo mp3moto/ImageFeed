@@ -384,8 +384,8 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4B8-bN-2pB">
                                 <rect key="frame" x="0.0" y="-55" width="390" height="941"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="Stz-Kc-8rR">
-                                        <rect key="frame" x="0.0" y="0.0" width="4000" height="5256"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Stub" translatesAutoresizingMaskIntoConstraints="NO" id="Stz-Kc-8rR">
+                                        <rect key="frame" x="0.0" y="0.0" width="83" height="75"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
@@ -456,10 +456,10 @@
         <segue reference="61f-BI-8VE"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="0" width="4000" height="5256"/>
         <image name="18" width="200" height="300"/>
         <image name="NoLike" width="29.333333969116211" height="26"/>
         <image name="Sharing" width="51" height="51"/>
+        <image name="Stub" width="83" height="75"/>
         <image name="UnsplashLogo" width="60" height="60"/>
         <image name="avatar" width="70" height="70"/>
         <image name="chevronBackward" width="24" height="24"/>

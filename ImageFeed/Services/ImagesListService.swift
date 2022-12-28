@@ -7,7 +7,7 @@ final class ImagesListService {
     var lastPhotosCount: Int = 0
     private var task, likeTask: URLSessionTask?
     static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
-    
+
     private func getNextPage() -> Int {
         if let nextPage = nextPage {
             return nextPage
@@ -15,7 +15,7 @@ final class ImagesListService {
             return 1
         }
     }
-    
+
     private func setNextPage() {
         if let nextPage = self.nextPage {
             self.nextPage = nextPage + 1
@@ -23,10 +23,10 @@ final class ImagesListService {
             self.nextPage = 2
         }
     }
-    
+
     private func getPhotosDataURLQueryItems() -> [String: Any] {
         let page = getNextPage()
-        let per_page = 5
+        let per_page = 10
         let natural = page > 1 ? true : false
         switch natural {
         case true:
@@ -35,12 +35,13 @@ final class ImagesListService {
             return ["per_page": per_page]
         }
     }
-    
+
     private func makePhotosRequest() -> URLRequest? {
         if let token = storage.token {
             let req: RequestFactoryProtocol = RequestFactory()
-            guard let request = req.createRequest(
-                url: PhotosDataURL!,
+            guard let PhotosDataURL = URL(string: PhotosDataURLString),
+                  let request = req.createRequest(
+                url: PhotosDataURL,
                 method: "GET",
                 postData: getPhotosDataURLQueryItems(),
                 headers: ["Authorization": "Bearer \(token)"],
@@ -51,7 +52,7 @@ final class ImagesListService {
             return nil
         }
     }
-    
+
     private func makeLikeRequest(id: String, isLike: Bool) -> URLRequest? {
         if let token = storage.token {
             let req: RequestFactoryProtocol = RequestFactory()
@@ -68,7 +69,7 @@ final class ImagesListService {
             return nil
         }
     }
-    
+
     func convert(photo: PhotoResult) -> Photo? {
         guard let id = photo.id,
               let width = photo.width,
@@ -78,12 +79,10 @@ final class ImagesListService {
               let urls = photo.urls,
               let thumbImageURL = urls.small,
               let _ = URL(string: thumbImageURL),
-              let largeImageURL = urls.regular,
-              let _ = URL(string: largeImageURL),
               let fullImageURL = urls.full,
               let _ = URL(string: fullImageURL)
         else { return nil }
-        
+
         let createdAt: Date?
         if let tmp = photo.created_at {
             let dateFormatter = ISO8601DateFormatter()
@@ -91,39 +90,37 @@ final class ImagesListService {
         } else {
             createdAt = nil
         }
-        
+
         let isLiked: Bool
         if let liked = photo.liked_by_user {
             isLiked = liked ? true : false
         } else {
             isLiked = false
         }
-        
+
         let welcomeDescription: String?
         if let tmp = photo.description {
             welcomeDescription = tmp
         } else {
             welcomeDescription = nil
         }
-        
+
         return Photo(
             id: id,
             size: CGSize(width: width, height: height),
             createdAt: createdAt,
             welcomeDescription: welcomeDescription,
             thumbImageURL: thumbImageURL,
-            largeImageURL: largeImageURL,
             fullImageURL: fullImageURL,
             isLiked: isLiked
         )
     }
-    
+
     func fetchPhotosNextPage() {
         if let _ = task {
             return
         } else {
             guard let request = makePhotosRequest() else { return }
-            //print(request)
             let session = URLSession.shared
             let task = session.objectTask(for: request) { (result: Result<[PhotoResult], Error>) in
                 self.task = nil
@@ -151,13 +148,12 @@ final class ImagesListService {
             task.resume()
         }
     }
-    
+
     func toggleLike(id: String, isLike: Bool, _ completion: @escaping(Result<Bool, Error>) -> Void) {
         if let _ = likeTask {
             return
         } else {
             guard let request = makeLikeRequest(id: id, isLike: isLike) else { return }
-            //print(request)
             let session = URLSession.shared
             let task = session.objectTask(for: request) { (result: Result<LikeResult, Error>) in
                 self.likeTask = nil
@@ -179,5 +175,4 @@ final class ImagesListService {
             task.resume()
         }
     }
-    
 }

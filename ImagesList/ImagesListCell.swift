@@ -10,16 +10,13 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var cellLike: UIButton!
     weak var delegate: imagesListCellDelegate?
     static let reuseIdentifier = "ImagesListCell"
-    
-    @IBAction func likeTap(_ sender: Any) {
+
+    @IBAction func setIsLiked(_ sender: UIButton) {
         delegate?.imagesListCellDidTapLike(self)
     }
+
     override func prepareForReuse() {
         super.prepareForReuse()
         cellImage.kf.cancelDownloadTask()
-    }
-    
-    func setIsLiked() {
-        print("setIsLiked called")
     }
 }

@@ -1,15 +1,9 @@
 import UIKit
 import Kingfisher
+import ProgressHUD
 
 final class SingleImageViewController: UIViewController {
     var photo: Photo?
-    //private var imageSize: CGSize?
-    var image = UIImage() {
-        didSet {
-            guard isViewLoaded else { return }
-            //imageView.image = image
-        }
-    }
 
     struct OptionalCoordinates {
         let x: CGFloat?
@@ -36,40 +30,41 @@ final class SingleImageViewController: UIViewController {
         let activityController = UIActivityViewController(activityItems: [imageView.image!], applicationActivities: nil)
         present(activityController, animated: true)
     }
-    /*
-    private func getQueryStringParameter(url: String, param: String) -> String? {
-        guard let url = URLComponents(string: url) else { return nil }
-        return url.queryItems?.first(where: { $0.name == param })?.value
-    }
-    */
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         guard let photo = photo,
               let imageURL = URL(string: photo.fullImageURL)
         else { return }
-        
-        print(photo)
-        /*if let newWidth = getQueryStringParameter(url: photo.largeImageURL, param: "w") {
-            print("newWidth = \(newWidth)")
-        }*/
-        imageView.kf.indicatorType = .activity
-        //imageView.kf.
+
+        let containerSize = scrollView.bounds.size
+        /*
+         Жаль, что заставляют использовать ProgressHUD. Индикатор от KF смотрится изящнее и не закрывает логотип
+         imageView.kf.indicatorType = .activity
+        */
+        ProgressHUD.show()
+        if let indicator = imageView.image {
+            let imageSize = indicator.size
+            let imageCoords = self.getImageCenterCoords(imageSize: imageSize, containerSize: containerSize, scale: 1.0)
+            setImageCoords(coords: imageCoords)
+        }
+
         imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "Stub")) { _ in
+            ProgressHUD.dismiss()
             let imageSize = photo.size
-            let containerSize = self.scrollView.bounds.size
             var widthRatio, heightRatio, ratio: CGFloat
             self.view.layoutIfNeeded()
-            
+
             widthRatio = containerSize.width / imageSize.width
             heightRatio = containerSize.height / imageSize.height
-            
+
             if widthRatio < heightRatio {
                 ratio = widthRatio
             } else {
                 ratio = heightRatio
             }
-            
+
             self.scrollView.minimumZoomScale = ratio
             if ratio < 1 {
                 self.scrollView.maximumZoomScale = 1.25
@@ -77,7 +72,7 @@ final class SingleImageViewController: UIViewController {
             else {
                 self.scrollView.maximumZoomScale = ratio + (ratio * 0.25)
             }
-            
+
             self.scrollView.maximumZoomScale = heightRatio + (heightRatio * 0.25)
             self.scrollView.setZoomScale(heightRatio, animated: false)
             

@@ -12,20 +12,19 @@ class ImagesListViewController: UIViewController {
         formatter.timeStyle = .none
         return formatter
     }()
-    
+
     private var imagesListServiceObserver: NSObjectProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         imagesList.fetchPhotosNextPage()
-        
+
         NotificationCenter.default.addObserver(
             forName: ImagesListService.DidChangeNotification,
             object: nil,
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-            //print("closure of addObserver")
             self.updateTableViewAnimated()
         }
     }
@@ -33,19 +32,24 @@ class ImagesListViewController: UIViewController {
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         if let thumbURL = URL(string: imagesList.photos[indexPath.row].thumbImageURL) {
             cell.cellImage.kf.indicatorType = .activity
-            cell.cellImage.kf.setImage(with: thumbURL, placeholder: UIImage(named: "Stub"))
+            cell.cellImage.kf.setImage(with: thumbURL, placeholder: UIImage(named: "Stub")) { _ in
+                cell.cellImage.contentMode = .scaleAspectFill
+            }
         } else {
             cell.cellImage.image = UIImage(named: "Stub")
         }
         let liked: String = imagesList.photos[indexPath.row].isLiked ? "Like" : "NoLike"
         cell.cellLike.setImage(UIImage(named: liked), for: .normal)
-        cell.cellDate.text = dateFormatter.string(from: Date())
+        if let createdAt = imagesList.photos[indexPath.row].createdAt {
+            cell.cellDate.text = dateFormatter.string(from: createdAt)
+        } else {
+            cell.cellDate.text = ""
+        }
     }
 }
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //print("imagesList.photos.count = \(imagesList.photos.count)")
         return imagesList.photos.count
     }
 
@@ -86,8 +90,6 @@ extension ImagesListViewController: UITableViewDataSource {
             }
             self.tableView.insertRows(at: indexPathArray, with: .automatic)
             imagesList.lastPhotosCount = imagesList.photos.count
-        } completion: { _ in
-    
         }
     }
 }

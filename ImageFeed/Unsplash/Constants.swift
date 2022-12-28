@@ -12,4 +12,4 @@ let ProfileDataURL = URL(string: "https://api.unsplash.com/me")
 let showAuthViewSegueIdentifier = "ShowAuthView"
 let showSplashViewSegueIdentifier = "ShowSplashView"
 let showTabBarViewSegueIdentifier = "ShowTabBarView"
-let PhotosDataURL = URL(string: "https://api.unsplash.com/photos")
+let PhotosDataURLString = "https://api.unsplash.com/photos"

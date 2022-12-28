@@ -12,11 +12,11 @@ final class ProfileViewController: UIViewController {
 
     @IBAction func didTapLogoutButton(_ sender: Any) {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Нет", style: .cancel, handler: { _ in
-
-        })
+        let cancelAction = UIAlertAction(title: "Нет", style: .cancel, handler: { _ in })
         let okAction = UIAlertAction(title: "Да", style: .default, handler: { _ in
-
+            let storage: OAuth2TokenStorage = OAuth2TokenStorage()
+            storage.token = nil
+            self.dismiss(animated: true)
         })
         alert.addAction(okAction)
         alert.addAction(cancelAction)

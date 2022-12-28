@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="OHT-VX-YMa">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8qj-hv-lc2">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -37,7 +37,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="265"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="18" translatesAutoresizingMaskIntoConstraints="NO" id="Fb8-81-31b">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Stub" translatesAutoresizingMaskIntoConstraints="NO" id="Fb8-81-31b">
                                                     <rect key="frame" x="16" y="0.0" width="358" height="257"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="252" id="aR1-fq-8BM"/>
@@ -69,7 +69,7 @@
                                                         <backgroundConfiguration key="background"/>
                                                     </buttonConfiguration>
                                                     <connections>
-                                                        <action selector="likeTap:" destination="Tca-by-b0R" eventType="touchUpInside" id="uIg-eH-Rmd"/>
+                                                        <action selector="setIsLiked:" destination="Tca-by-b0R" eventType="touchUpInside" id="8Sy-9e-UvT"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -384,7 +384,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4B8-bN-2pB">
                                 <rect key="frame" x="0.0" y="-55" width="390" height="941"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Stub" translatesAutoresizingMaskIntoConstraints="NO" id="Stz-Kc-8rR">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Stub" translatesAutoresizingMaskIntoConstraints="NO" id="Stz-Kc-8rR">
                                         <rect key="frame" x="0.0" y="0.0" width="83" height="75"/>
                                     </imageView>
                                 </subviews>
@@ -431,10 +431,10 @@
                         <color key="backgroundColor" name="YPBlack"/>
                         <constraints>
                             <constraint firstItem="Bcl-qh-eWk" firstAttribute="top" secondItem="RqU-A9-Nku" secondAttribute="top" constant="9" id="4a7-4S-gfp"/>
-                            <constraint firstItem="4B8-bN-2pB" firstAttribute="trailing" secondItem="RqU-A9-Nku" secondAttribute="trailing" id="CQF-Gn-oka"/>
+                            <constraint firstItem="4B8-bN-2pB" firstAttribute="trailing" secondItem="PbT-l5-yTC" secondAttribute="trailing" id="CQF-Gn-oka"/>
                             <constraint firstItem="4B8-bN-2pB" firstAttribute="bottomMargin" secondItem="PbT-l5-yTC" secondAttribute="bottom" id="FlW-f1-k6E"/>
                             <constraint firstItem="Bcl-qh-eWk" firstAttribute="leading" secondItem="RqU-A9-Nku" secondAttribute="leading" constant="9" id="Ptk-o0-DIb"/>
-                            <constraint firstItem="4B8-bN-2pB" firstAttribute="leading" secondItem="RqU-A9-Nku" secondAttribute="leading" id="Sku-GU-Mci"/>
+                            <constraint firstItem="4B8-bN-2pB" firstAttribute="leading" secondItem="PbT-l5-yTC" secondAttribute="leading" id="Sku-GU-Mci"/>
                             <constraint firstItem="Ohw-Od-G6L" firstAttribute="centerX" secondItem="RqU-A9-Nku" secondAttribute="centerX" id="V8f-js-6QG"/>
                             <constraint firstItem="4B8-bN-2pB" firstAttribute="topMargin" secondItem="PbT-l5-yTC" secondAttribute="top" id="YDx-FY-ajj"/>
                             <constraint firstItem="RqU-A9-Nku" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Bcl-qh-eWk" secondAttribute="trailing" symbolic="YES" id="mk2-mT-0aI"/>
@@ -456,7 +456,6 @@
         <segue reference="61f-BI-8VE"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="18" width="200" height="300"/>
         <image name="NoLike" width="29.333333969116211" height="26"/>
         <image name="Sharing" width="51" height="51"/>
         <image name="Stub" width="83" height="75"/>

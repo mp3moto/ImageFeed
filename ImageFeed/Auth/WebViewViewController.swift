@@ -45,6 +45,16 @@ extension WebViewViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let code = code(from: navigationAction) {
             authDelegate?.webViewViewController(self, didAuthenticateWithCode: code)
+            
+            // Историю браузера намеренно очищаю сразу после авторизации,
+            // так как нет никакого смысла хранить её после получения code
+            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+                records.forEach { record in
+                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+                }
+            }
+            
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)

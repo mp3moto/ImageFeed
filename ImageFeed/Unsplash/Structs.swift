@@ -45,24 +45,11 @@ struct Photo {
     let createdAt: Date?
     let welcomeDescription: String?
     let thumbImageURL: String
-    let largeImageURL: String
     let fullImageURL: String
     let isLiked: Bool
-    /*
-    init(id: String, size: CGSize, createdAt: Date?, welcomeDescription: String?, thumbImageURL: String, largeImageURL: String?, isLiked: Bool) {
-        self.id = id
-        self.size = size
-        self.createdAt = createdAt
-        self.welcomeDescription = welcomeDescription
-        self.thumbImageURL = thumbImageURL
-        self.largeImageURL = largeImageURL
-        self.isLiked = isLiked
-    }
-     */
 }
 
 struct UrlsResult: Codable {
-    let regular: String?
     let full: String?
     let small: String?
 }

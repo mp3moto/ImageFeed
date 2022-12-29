@@ -1,12 +1,9 @@
 import UIKit
+import Kingfisher
+import ProgressHUD
 
 final class SingleImageViewController: UIViewController {
-    var image = UIImage() {
-        didSet {
-            guard isViewLoaded else { return }
-            imageView.image = image
-        }
-    }
+    var photo: Photo?
 
     struct OptionalCoordinates {
         let x: CGFloat?
@@ -30,40 +27,58 @@ final class SingleImageViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     @IBAction func didTapShareButton(_ sender: Any) {
-        let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        let activityController = UIActivityViewController(activityItems: [imageView.image!], applicationActivities: nil)
         present(activityController, animated: true)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
-        let imageSize = image.size
+
+        guard let photo = photo,
+              let imageURL = URL(string: photo.fullImageURL)
+        else { return }
+
         let containerSize = scrollView.bounds.size
-        var widthRatio, heightRatio, ratio: CGFloat
-        view.layoutIfNeeded()
-
-        widthRatio = containerSize.width / imageSize.width
-        heightRatio = containerSize.height / imageSize.height
-
-        if widthRatio < heightRatio {
-            ratio = widthRatio
-        } else {
-            ratio = heightRatio
+        /*
+         Жаль, что заставляют использовать ProgressHUD. Индикатор от KF смотрится изящнее и не закрывает логотип
+         imageView.kf.indicatorType = .activity
+        */
+        ProgressHUD.show()
+        if let indicator = imageView.image {
+            let imageSize = indicator.size
+            let imageCoords = self.getImageCenterCoords(imageSize: imageSize, containerSize: containerSize, scale: 1.0)
+            setImageCoords(coords: imageCoords)
         }
 
-        scrollView.minimumZoomScale = ratio
-        if ratio < 1 {
-            scrollView.maximumZoomScale = 1.25
-        }
-        else {
-            scrollView.maximumZoomScale = ratio + (ratio * 0.25)
-        }
+        imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "Stub")) { _ in
+            ProgressHUD.dismiss()
+            let imageSize = photo.size
+            var widthRatio, heightRatio, ratio: CGFloat
+            self.view.layoutIfNeeded()
 
-        scrollView.maximumZoomScale = heightRatio + (heightRatio * 0.25)
-        scrollView.setZoomScale(heightRatio, animated: false)
-        let imageCoords = getImageCenterCoords(imageSize: image.size, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
+            widthRatio = containerSize.width / imageSize.width
+            heightRatio = containerSize.height / imageSize.height
 
-        setImageCoords(coords: imageCoords)
+            if widthRatio < heightRatio {
+                ratio = widthRatio
+            } else {
+                ratio = heightRatio
+            }
+
+            self.scrollView.minimumZoomScale = ratio
+            if ratio < 1 {
+                self.scrollView.maximumZoomScale = 1.25
+            }
+            else {
+                self.scrollView.maximumZoomScale = ratio + (ratio * 0.25)
+            }
+
+            self.scrollView.maximumZoomScale = heightRatio + (heightRatio * 0.25)
+            self.scrollView.setZoomScale(heightRatio, animated: false)
+            
+            let imageCoords = self.getImageCenterCoords(imageSize: imageSize, containerSize: self.scrollView.bounds.size, scale: self.scrollView.zoomScale)
+            self.setImageCoords(coords: imageCoords)
+        }
     }
 
     private func getImageCoords(imageSize: CGSize, containerSize: CGSize, scale: CGFloat = 1.0) -> OptionalCoordinates {
@@ -107,7 +122,8 @@ extension SingleImageViewController: UIScrollViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let imageCoords = getImageCoords(imageSize: self.image.size, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
+        let imageSize = CGSize(width: imageView.bounds.width, height: imageView.bounds.height)
+        let imageCoords = getImageCoords(imageSize: imageSize, containerSize: scrollView.bounds.size, scale: scrollView.zoomScale)
         setImageCoords(coords: imageCoords)
     }
 }

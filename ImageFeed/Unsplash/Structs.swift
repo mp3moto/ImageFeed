@@ -38,3 +38,32 @@ struct ProfileImage: Decodable {
 struct UserResult: Decodable {
     let profile_image: ProfileImage
 }
+
+struct Photo {
+    let id: String
+    let size: CGSize
+    let createdAt: Date?
+    let welcomeDescription: String?
+    let thumbImageURL: String
+    let fullImageURL: String
+    let isLiked: Bool
+}
+
+struct UrlsResult: Codable {
+    let full: String?
+    let small: String?
+}
+
+struct PhotoResult: Codable {
+    let id: String?
+    let width: Int?
+    let height: Int?
+    let created_at: String?
+    let liked_by_user: Bool?
+    let description: String?
+    let urls: UrlsResult?
+}
+
+struct LikeResult: Codable {
+    let photo: PhotoResult
+}

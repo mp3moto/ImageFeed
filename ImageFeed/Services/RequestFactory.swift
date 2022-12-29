@@ -5,7 +5,7 @@ final class RequestFactory: RequestFactoryProtocol {
 
         var httpMethod: String
         switch method {
-        case "POST":
+        case "POST", "DELETE":
             httpMethod = method
         default:
             httpMethod = "GET"

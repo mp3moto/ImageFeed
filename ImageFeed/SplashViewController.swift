@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 final class SplashViewController: UIViewController {
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
@@ -7,8 +8,15 @@ final class SplashViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Use row below to erase Auth token on app launch for debugging needs. Don't forget to comment it on next launch.
-        //storage.token = nil
+        
+        let cache = ImageCache.default
+        
+        cache.memoryStorage.config.totalCostLimit = 300 * 1024 * 1024
+        cache.memoryStorage.config.countLimit = 150
+        cache.diskStorage.config.sizeLimit = 1000 * 1024 * 1024
+        cache.memoryStorage.config.expiration = .seconds(600)
+        cache.diskStorage.config.expiration = .never
+        cache.memoryStorage.config.cleanInterval = 30
     }
 
     override func viewDidAppear(_ animated: Bool) {

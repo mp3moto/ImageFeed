@@ -11,12 +11,15 @@ final class ImagesListCell: UITableViewCell {
     weak var delegate: imagesListCellDelegate?
     static let reuseIdentifier = "ImagesListCell"
 
-    @IBAction func setIsLiked(_ sender: UIButton) {
+    @IBAction private func setIsLiked(_ sender: UIButton) {
         delegate?.imagesListCellDidTapLike(self)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         cellImage.kf.cancelDownloadTask()
+        cellDate.text = ""
+        cellLike.setImage(UIImage(named: "NoLike"), for: .normal)
+        cellImage.image = UIImage(named: "Stub")
     }
 }

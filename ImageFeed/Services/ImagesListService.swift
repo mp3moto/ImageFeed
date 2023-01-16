@@ -1,6 +1,6 @@
 import Foundation
 
-final class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     private (set) var photos: [Photo] = []
     private var nextPage: Int?

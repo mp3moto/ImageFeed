@@ -3,7 +3,6 @@ import Foundation
 final class ProfileService {
     static let shared = ProfileService()
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
-    //private let profileImageService = ProfileImageService.shared
 
     private var tempProfile: Profile?
     var profile: Profile? {

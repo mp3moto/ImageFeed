@@ -16,25 +16,12 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
         super.viewDidLoad()
         webViewViewController.navigationDelegate = self
         presenter?.viewDidLoad()
-        /*
-        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: AccessKey),
-            URLQueryItem(name: "redirect_uri", value: RedirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: AccessScope)
-        ]
-        let url = urlComponents.url!
-        let request = URLRequest(url: url)
-        webViewViewController.load(request)
-        */
 
         estimatedProgressObservation = webViewViewController.observe(
             \.estimatedProgress,
              changeHandler: { [weak self] _, _ in
                  guard let self = self else { return }
                  self.presenter?.didUpdateProgressValue(self.webViewViewController.estimatedProgress)
-                 //self.updateProgress()
              }
         )
     }
@@ -50,13 +37,6 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     func setProgressHidden(_ isHidden: Bool) {
         progressView.isHidden = isHidden
     }
-    /*
-    private func updateProgress() {
-        let progress: Float = Float(webViewViewController.estimatedProgress)
-        progressView.progress = progress
-        progressView.isHidden = abs(progress - 1.0) <= 0.0001
-    }
-    */
 }
 
 extension WebViewViewController: WKNavigationDelegate {
@@ -64,8 +44,6 @@ extension WebViewViewController: WKNavigationDelegate {
         if let code = code(from: navigationAction) {
             authDelegate?.webViewViewController(self, didAuthenticateWithCode: code)
             
-            // Историю браузера намеренно очищаю сразу после авторизации,
-            // так как нет никакого смысла хранить её после получения code
             HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
             WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
                 records.forEach { record in

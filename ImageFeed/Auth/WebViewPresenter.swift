@@ -16,6 +16,7 @@ final class WebViewPreseter: WebViewPresenterProtocol {
     }
 
     func viewDidLoad() {
+        /*
         var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: AccessKey),
@@ -24,10 +25,11 @@ final class WebViewPreseter: WebViewPresenterProtocol {
             URLQueryItem(name: "scope", value: AccessScope)
         ]
         let url = urlComponents.url!
+        */
         let request = authHelper.authRequest()
         
         didUpdateProgressValue(0)
-        
+        print(request)
         view?.load(request: request)
     }
 

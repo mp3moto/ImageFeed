@@ -36,6 +36,25 @@ final class ImagesListServiceMock: ImagesListServiceProtocol {
     }
 }
 
+final class ProfileViewPresenterSpy: ProfileViewPresenterProtocol {
+    var view: ProfileViewControllerProtocol?
+    
+    func viewDidLoad() {
+        
+    }
+    
+    func updateAvatar() {
+        
+    }
+    
+    func updateProfileDetails() {
+        let profile = Profile(id: "123", username: "user001", first_name: "Renat", last_name: "Gareev", bio: nil)
+        view?.updateProfileDetails(profile: profile)
+    }
+    
+    
+}
+
 final class ImagesListPresenterSpy: ImagesListPresenterProtocol {
     let imagesList = ImagesListServiceMock()
     var viewDidLoadCalled: Bool = false

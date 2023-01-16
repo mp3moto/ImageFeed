@@ -292,7 +292,7 @@
         <!--ProfileView-->
         <scene sceneID="FIk-e4-RuG">
             <objects>
-                <viewController title="ProfileView" id="gLY-aI-GDA" customClass="ProfileViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileViewController" title="ProfileView" id="gLY-aI-GDA" customClass="ProfileViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WHz-Ox-O6D">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

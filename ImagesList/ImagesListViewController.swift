@@ -2,7 +2,7 @@ import UIKit
 import Kingfisher
 
 class ImagesListViewController: UIViewController {
-    @IBOutlet private var tableView: UITableView!
+    @IBOutlet var tableView: UITableView!
     
     var presenter: ImagesListPresenterProtocol?
     

@@ -73,7 +73,9 @@ extension ImagesListViewController: UITableViewDelegate, imagesListCellDelegate 
     }
     func imagesListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        UIBlockingProgressHUD.show()
+        DispatchQueue.main.async {
+            UIBlockingProgressHUD.show()
+        }
         presenter?.imagesListCellDidTapLike(cell, indexPath: indexPath)
     }
 }

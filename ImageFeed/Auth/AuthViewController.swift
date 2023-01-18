@@ -71,7 +71,9 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegateP
             let alertService: AlertService = AlertService(controller: self)
             switch result {
             case .success:
-                UIBlockingProgressHUD.dismiss()
+                DispatchQueue.main.async {
+                    UIBlockingProgressHUD.dismiss()
+                }
                 if let username = self.profileService.profile?.username {
                     self.profileImageService.fetchProfileImageURL(username: username, completion: { result in
                         if case let .failure(error) = result {

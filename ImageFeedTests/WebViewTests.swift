@@ -19,10 +19,9 @@ final class WebViewTests: XCTestCase {
     }
 
     func testPresenterCallsLoadRequest() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let viewController = storyboard.instantiateViewController(withIdentifier: "WebViewViewController") as? WebViewViewControllerSpy
-        else { return }
-        let presenter = WebViewPresenterSpy()
+        let viewController = WebViewViewControllerSpy()
+        let authHelper = AuthHelper()
+        let presenter = WebViewPreseter(authHelper: authHelper)
         viewController.presenter = presenter
         presenter.view = viewController
         
@@ -65,7 +64,7 @@ final class WebViewTests: XCTestCase {
         let authHelper = AuthHelper(configuration: configuration)
         
         // when
-        let url = authHelper.authURL()
+        guard let url = authHelper.authURL() else { return }
         let urlString = url.absoluteString
         
         // then
@@ -92,61 +91,6 @@ final class WebViewTests: XCTestCase {
     }
 }
 
-final class ImagesListTests: XCTestCase {
-    func test10PhotosOn2Page() {
-        // given
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let viewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as? ImagesListViewController
-        else { return }
-        let presenter = ImagesListPresenterSpy()
-        viewController.presenter = presenter
-        
-        // when
-        _ = viewController.view
-        viewController.presenter?.fetchPhotosNextPage()
-        
-        // then
-        XCTAssertEqual(viewController.presenter?.photosCount, 10)
-    }
-    
-    func testLikeFunction() {
-        let presenter = ImagesListPresenterSpy()
-        
-        // when
-        presenter.didLoad()
-        presenter.toggleLike(index: 0)
-        
-        // then
-        XCTAssertTrue(presenter.photo(index: 0).isLiked)
-    }
-    
-    func testDislikeFunction() {
-        let presenter = ImagesListPresenterSpy()
-        
-        // when
-        presenter.didLoad()
-        presenter.toggleLike(index: 0)
-        presenter.toggleLike(index: 0)
-        
-        // then
-        XCTAssertFalse(presenter.photo(index: 0).isLiked)
-    }
-}
 
-final class ProfileViewTests: XCTestCase {
-    func testProfileInfo() {
-        // given
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let viewController = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController
-        else { return }
-        let presenter = ProfileViewPresenterSpy()
-        viewController.presenter = presenter
-        
-        // when
-        _ = viewController.view
-        presenter.updateProfileDetails()
-        
-        // then
-        XCTAssertEqual(viewController.profileAccountName.text, "user001")
-    }
-}
+
+

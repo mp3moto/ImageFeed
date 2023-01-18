@@ -16,32 +16,20 @@ final class WebViewPreseter: WebViewPresenterProtocol {
     }
 
     func viewDidLoad() {
-        /*
-        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: AccessKey),
-            URLQueryItem(name: "redirect_uri", value: RedirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: AccessScope)
-        ]
-        let url = urlComponents.url!
-        */
-        let request = authHelper.authRequest()
-        
+        guard let request = authHelper.authRequest() else { return }
         didUpdateProgressValue(0)
-        print(request)
         view?.load(request: request)
     }
 
     func didUpdateProgressValue(_ newValue: Double) {
         var value: Double
-        if newValue < 0 || newValue > 100 {
-            if newValue < 0 {
-                value = 0
-            } else {
-                value = 100
-            }
-        } else {
+        
+        switch newValue {
+        case ..<0:
+            value = 0
+        case 100...:
+            value = 100
+        default:
             value = newValue
         }
         

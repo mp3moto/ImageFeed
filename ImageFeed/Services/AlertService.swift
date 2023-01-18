@@ -48,8 +48,6 @@ class AlertService {
         })
         alert.addAction(okAction)
         alert.addAction(cancelAction)
-
-        //alert.present(alert, animated: true)
         
         self.controller.present(alert, animated: true)
     }

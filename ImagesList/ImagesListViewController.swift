@@ -28,8 +28,7 @@ class ImagesListViewController: UIViewController {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let presenter = presenter else { return 0 }
-        return presenter.photosCount
+        return presenter?.photosCount ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -76,6 +75,5 @@ extension ImagesListViewController: UITableViewDelegate, imagesListCellDelegate 
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         UIBlockingProgressHUD.show()
         presenter?.imagesListCellDidTapLike(cell, indexPath: indexPath)
-        UIBlockingProgressHUD.dismiss()
     }
 }

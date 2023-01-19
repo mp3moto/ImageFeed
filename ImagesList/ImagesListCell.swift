@@ -17,6 +17,7 @@ final class ImagesListCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         cellImage.kf.cancelDownloadTask()
         cellDate.text = ""
         cellLike.setImage(UIImage(named: "NoLike"), for: .normal)

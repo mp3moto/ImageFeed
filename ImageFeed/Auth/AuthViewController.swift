@@ -1,6 +1,6 @@
 import UIKit
 
-final class AuthViewController: UIViewController, WebViewViewControllerProtocol {
+final class AuthViewController: UIViewController, WebViewViewControllerDelegateProtocol {
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
@@ -22,7 +22,13 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
-            let viewController = segue.destination as! WebViewViewController
+            guard
+                let viewController = segue.destination as? WebViewViewController
+            else { fatalError("failed to prepare segue") }
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPreseter(authHelper: authHelper)
+            viewController.presenter = webViewPresenter
+            webViewPresenter.view = viewController
             viewController.authDelegate = self
         } else {
             super.prepare(for: segue, sender: sender)
@@ -65,7 +71,9 @@ final class AuthViewController: UIViewController, WebViewViewControllerProtocol 
             let alertService: AlertService = AlertService(controller: self)
             switch result {
             case .success:
-                UIBlockingProgressHUD.dismiss()
+                DispatchQueue.main.async {
+                    UIBlockingProgressHUD.dismiss()
+                }
                 if let username = self.profileService.profile?.username {
                     self.profileImageService.fetchProfileImageURL(username: username, completion: { result in
                         if case let .failure(error) = result {

@@ -1,33 +1,43 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
-    private let profileService = ProfileService.shared
-    private let profileImageService = ProfileImageService.shared
-
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    var presenter: ProfileViewPresenterProtocol?
+    
     @IBOutlet private weak var profileUserName: UILabel!
-    @IBOutlet private weak var profileAccountName: UILabel!
-    @IBOutlet weak var profileUserStatus: UILabel!
-    @IBOutlet private weak var profileImage: UIImageView!
+    @IBOutlet weak var profileAccountName: UILabel!
+    @IBOutlet private weak var profileUserStatus: UILabel!
+    @IBOutlet weak var profileImage: UIImageView!
 
     @IBAction func didTapLogoutButton(_ sender: Any) {
-        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Нет", style: .cancel, handler: { _ in })
-        let okAction = UIAlertAction(title: "Да", style: .default, handler: { _ in
-            let storage: OAuth2TokenStorage = OAuth2TokenStorage()
-            storage.token = nil
-            self.dismiss(animated: true)
-        })
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-
-        present(alert, animated: true)
+        let alert = AlertService(controller: self)
+        alert.showLogoutAlert()
     }
-
-    private var profileImageServiceObserver: NSObjectProtocol?
+    
+    var profileImageGradient = CAGradientLayer()
+    var profileUserNameGradient = CAGradientLayer()
+    var profileAccountNameGradient = CAGradientLayer()
+    var profileUserStatusGradient = CAGradientLayer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileImageGradient = GradientForView(width: 70, height: 70).getAnimatedLayer()
+        profileUserNameGradient = GradientForView(width:223, height: 18).getAnimatedLayer()
+        profileAccountNameGradient = GradientForView(width: 89, height: 18).getAnimatedLayer()
+        profileUserStatusGradient = GradientForView(width: 67, height: 18).getAnimatedLayer()
+        
+        profileImage.layer.addSublayer(profileImageGradient)
+        profileUserName.layer.addSublayer(profileUserNameGradient)
+        profileAccountName.layer.addSublayer(profileAccountNameGradient)
+        profileUserStatus.layer.addSublayer(profileUserStatusGradient)
+        
+        
+        if presenter == nil {
+            presenter = ProfileViewPresenter()
+        }
+        presenter?.view = self
+        presenter?.viewDidLoad()
 
         NotificationCenter.default.addObserver(
             forName: ProfileImageService.DidChangeNotification,
@@ -35,27 +45,31 @@ final class ProfileViewController: UIViewController {
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-            self.updateAvatar()
+            self.presenter?.updateAvatar()
         }
-        updateAvatar()
-        if let profile = profileService.profile {
-            updateProfileDetails(profile: profile)
+        presenter?.updateAvatar()
+        presenter?.updateProfileDetails()
+    }
+
+    
+    func updateAvatar(url: URL) {
+        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "avatar")) { result in
+            switch result {
+            case .success:
+                self.profileImageGradient.removeFromSuperlayer()
+            case .failure:
+                return
+            }
         }
     }
 
-    func updateAvatar() {
-        guard
-            let profileImageURL = profileImageService.avatarURL,
-            let url = URL(string: profileImageURL)
-        else {
-            return
-        }
-        profileImage.kf.setImage(with: url, placeholder: UIImage(named: "avatar"))
-    }
-
-    private func updateProfileDetails(profile: Profile) {
+    func updateProfileDetails(profile: Profile) {
         self.profileUserName.text = profile.name()
         self.profileAccountName.text = profile.username
         self.profileUserStatus.text = profile.bio
+        
+        self.profileUserNameGradient.removeFromSuperlayer()
+        self.profileAccountNameGradient.removeFromSuperlayer()
+        self.profileUserStatusGradient.removeFromSuperlayer()
     }
 }
